@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Simple - eTax Mobile PWA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- PDF.js for PDF rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- PDF-lib for PDF processing -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <style>
+        :root {
+            --primary: #b71c1c;
+            --secondary: #d32f2f;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --light: #f5f5f5;
+            --dark: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .action-card i {
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .action-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--info);
+        }
+
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .page-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-item i {
+            color: var(--primary);
+            font-size: 1.5em;
+        }
+
+        .page-item span {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-cogs"></i> Admin Simple</h1>
+            <p>Quản lý eTax Mobile PWA - Đơn giản & Hiệu quả</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number">25</div>
+                <div class="label">Trang User</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">3</div>
+                <div class="label">Admin Tools</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">92</div>
+                <div class="label">Assets</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">100%</div>
+                <div class="label">Mobile Ready</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card">
+                <i class="fas fa-eye"></i>
+                <h3>Preview User Pages</h3>
+                <p>Xem trước các trang người dùng</p>
+                <a href="../pages/index.html" class="btn">Xem Pages</a>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-building"></i>
+                <h3>Quản lý MST</h3>
+                <p>Quản lý nội dung theo MST</p>
+                <button onclick="openMSTManager()" class="btn">Mở MST Manager</button>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-plus"></i>
+                <h3>Thêm MST Mới</h3>
+                <p>Tạo MST và nội dung mới</p>
+                <button onclick="openAddMST()" class="btn btn-secondary">Thêm MST</button>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-download"></i>
+                <h3>Export/Import</h3>
+                <p>Xuất/nhập dữ liệu MST</p>
+                <button onclick="openExportImport()" class="btn btn-secondary">Export/Import</button>
+            </div>
+
+            <div class="action-card">
+                <i class="fas fa-file-pdf"></i>
+                <h3>Quản lý PDF</h3>
+                <p>Upload và quản lý PDF cho MST</p>
+                <button onclick="openPDFManager()" class="btn">Quản lý PDF</button>
+            </div>
+        </div>
+
+        <!-- User Pages List -->
+        <div class="action-card">
+            <h3><i class="fas fa-file-alt"></i> Danh sách User Pages</h3>
+            <p>25 trang người dùng đã được tối ưu cho mobile</p>
+            
+            <div class="pages-grid">
+                <div class="page-item">
+                    <i class="fas fa-home"></i>
+                    <span>index.html - Trang chủ</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>login.html - Đăng nhập</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>khaithue.html - Khai thuế</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-credit-card"></i>
+                    <span>nopthue.html - Nộp thuế</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-search"></i>
+                    <span>tracuttnpt.html - Tra cứu</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-user"></i>
+                    <span>thongtin.html - Thông tin</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>hotro.html - Hỗ trợ</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-cog"></i>
+                    <span>thietlap.html - Cài đặt</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>nghiavu.html - Nghĩa vụ</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-tools"></i>
+                    <span>tienich.html - Tiện ích</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-folder"></i>
+                    <span>hoso.html - Hồ sơ</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-receipt"></i>
+                    <span>hoadondt.html - Hóa đơn</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-bell"></i>
+                    <span>thongbao.html - Thông báo</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-user-plus"></i>
+                    <span>dangky.html - Đăng ký</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-key"></i>
+                    <span>doimatkhau.html - Đổi mật khẩu</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>van-tay.html - Vân tay</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>thongtinnvt.html - Thông tin NV</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-edit"></i>
+                    <span>thaydoittdkthue.html - Thay đổi TT</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-history"></i>
+                    <span>hsdkythue.html - Lịch sử</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-headset"></i>
+                    <span>ho-tro-qtt.html - Hỗ trợ QTT</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-headset"></i>
+                    <span>ho-tro-qtthue.html - Hỗ trợ QT</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-search"></i>
+                    <span>tra-cuu-chung-tu.html - Tra cứu CT</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-bell"></i>
+                    <span>chi-tiet-thong-bao.html - Chi tiết TB</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-info"></i>
+                    <span>thongtin-chitiet.html - Thông tin CT</span>
+                </div>
+                <div class="page-item">
+                    <i class="fas fa-bell"></i>
+                    <span>page-thongbao.html - Trang TB</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MST Manager Modal -->
+    <div id="mstManagerModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Quản lý MST</h2>
+                <span class="close" onclick="closeMSTManager()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="mstList"></div>
+                <div id="mstEditor" style="display: none;">
+                    <h3>Chỉnh sửa nội dung MST</h3>
+                    <div id="mstEditorContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add MST Modal -->
+    <div id="addMSTModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thêm MST Mới</h2>
+                <span class="close" onclick="closeAddMST()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addMSTForm">
+                    <div class="form-group">
+                        <label>MST (Mã số thuế):</label>
+                        <input type="text" id="newMST" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu:</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tên công ty:</label>
+                        <input type="text" id="newCompanyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ:</label>
+                        <input type="text" id="newAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại:</label>
+                        <input type="text" id="newPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="newEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Người đại diện:</label>
+                        <input type="text" id="newRepresentative" required>
+                    </div>
+                    <button type="submit" class="btn">Thêm MST</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Manager Modal -->
+    <div id="pdfManagerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-pdf"></i> Quản lý PDF cho MST</h3>
+                <span class="close" onclick="closePDFManager()">&times;</span>
+            </div>
+            <div class="pdf-upload-section">
+                <h4>📄 Upload PDF cho MST</h4>
+                <div class="form-group">
+                    <label>Chọn MST:</label>
+                    <select id="pdfMstSelect" onchange="loadPDFList()">
+                        <option value="">Chọn MST</option>
+                    </select>
+                </div>
+                <div class="pdf-upload-area" onclick="document.getElementById('pdfFileInput').click()" 
+                     ondrop="handlePDFDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                    <p>Kéo thả PDF vào đây hoặc click để chọn file</p>
+                    <p style="color: #666; font-size: 14px;">Hỗ trợ: PDF files</p>
+                </div>
+                <input type="file" id="pdfFileInput" accept=".pdf" multiple style="display: none;" onchange="handlePDFUpload()">
+            </div>
+            <div class="pdf-list" id="pdfList">
+                <!-- PDF list will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div id="pdfPreviewModal" class="pdf-preview-modal">
+        <div class="pdf-toolbar">
+            <button onclick="closePDFPreview()">✕</button>
+            <h3 id="pdfTitle">PDF Preview</h3>
+            <button onclick="printPDF()">🖨️ In</button>
+        </div>
+        <div class="pdf-canvas-container">
+            <canvas id="pdf-canvas"></canvas>
+        </div>
+        <div class="pdf-actions">
+            <button class="pdf-btn" onclick="confirmPDF()">✅ Xác nhận</button>
+            <button class="pdf-btn secondary" onclick="closePDFPreview()">❌ Hủy</button>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .mst-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mst-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--primary);
+        }
+
+        .mst-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .mst-actions button {
+            margin-left: 10px;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-edit {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* PDF Preview Modal - iOS Quick Look Style */
+        .pdf-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .pdf-toolbar {
+            background: rgba(0,0,0,0.8);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .pdf-toolbar h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .pdf-toolbar button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .pdf-toolbar button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .pdf-canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .pdf-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-radius: 8px;
+        }
+
+        .pdf-actions {
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pdf-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+
+        .pdf-btn:hover {
+            background: #0056CC;
+            transform: scale(1.05);
+        }
+
+        .pdf-btn.secondary {
+            background: #8E8E93;
+        }
+
+        .pdf-btn.secondary:hover {
+            background: #6D6D70;
+        }
+
+        /* PDF Upload Interface */
+        .pdf-upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .pdf-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .pdf-upload-area:hover {
+            border-color: var(--primary);
+            background: #f8f9fa;
+        }
+
+        .pdf-upload-area.dragover {
+            border-color: var(--primary);
+            background: #f8f9fa;
+        }
+
+        .pdf-list {
+            margin-top: 20px;
+        }
+
+        .pdf-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pdf-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pdf-item-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .pdf-item-btn:hover {
+            background: var(--secondary);
+        }
+
+        .pdf-item-btn.secondary {
+            background: var(--info);
+        }
+
+        .pdf-item-btn.danger {
+            background: var(--danger);
+        }
+    </style>
+
+    <script src="../../src/services/admin-integration.js"></script>
+    <script src="../../src/services/mst-system.js"></script>
+    <script>
+        // Simple admin functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check admin login
+            if (!localStorage.getItem('adminLoggedIn')) {
+                window.location.href = 'admin-auth.html';
+            }
+
+            // Add click handlers for page items
+            document.querySelectorAll('.page-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const pageName = this.querySelector('span').textContent.split(' - ')[0];
+                    window.open(`../pages/${pageName}`, '_blank');
+                });
+            });
+
+            // Add hover effects
+            document.querySelectorAll('.page-item').forEach(item => {
+                item.style.cursor = 'pointer';
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 5px 20px rgba(0,0,0,0.15)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 3px 10px rgba(0,0,0,0.1)';
+                });
+            });
+        });
+
+        // Export admin changes
+        function exportAdminChanges() {
+            if (window.adminIntegration) {
+                adminIntegration.exportChanges();
+                alert('✅ Đã export thay đổi admin thành công!');
+            } else {
+                alert('❌ Admin integration chưa được load!');
+            }
+        }
+
+        // Import admin changes
+        function importAdminChanges(file) {
+            if (window.adminIntegration) {
+                adminIntegration.importChanges(file);
+            } else {
+                alert('❌ Admin integration chưa được load!');
+            }
+        }
+
+        // MST Management Functions
+        function openMSTManager() {
+            const modal = document.getElementById('mstManagerModal');
+            modal.style.display = 'flex';
+            loadMSTList();
+        }
+
+        function closeMSTManager() {
+            document.getElementById('mstManagerModal').style.display = 'none';
+        }
+
+        function openAddMST() {
+            const modal = document.getElementById('addMSTModal');
+            modal.style.display = 'flex';
+        }
+
+        function closeAddMST() {
+            document.getElementById('addMSTModal').style.display = 'none';
+        }
+
+        function openExportImport() {
+            const choice = confirm('Chọn Export để xuất dữ liệu, Cancel để import dữ liệu');
+            if (choice) {
+                if (window.mstSystem) {
+                    mstSystem.exportMSTData();
+                } else {
+                    alert('❌ MST System chưa được load!');
+                }
+            } else {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = function(e) {
+                    if (window.mstSystem) {
+                        mstSystem.importMSTData(e.target.files[0]);
+                    } else {
+                        alert('❌ MST System chưa được load!');
+                    }
+                };
+                input.click();
+            }
+        }
+
+        function loadMSTList() {
+            if (!window.mstSystem) {
+                alert('❌ MST System chưa được load!');
+                return;
+            }
+
+            const mstList = mstSystem.getMSTList();
+            const container = document.getElementById('mstList');
+            
+            container.innerHTML = mstList.map(mst => `
+                <div class="mst-item">
+                    <div class="mst-info">
+                        <h4>${mst.mst} - ${mst.companyName}</h4>
+                        <p>Trạng thái: ${mst.status} | Lần đăng nhập cuối: ${mst.lastLogin ? new Date(mst.lastLogin).toLocaleString('vi-VN') : 'Chưa có'}</p>
+                    </div>
+                    <div class="mst-actions">
+                        <button class="btn-edit" onclick="editMST('${mst.mst}')">Chỉnh sửa</button>
+                        <button class="btn-delete" onclick="deleteMST('${mst.mst}')">Xóa</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editMST(mst) {
+            if (!window.mstSystem) {
+                alert('❌ MST System chưa được load!');
+                return;
+            }
+
+            const content = mstSystem.getMSTContent(mst);
+            if (!content) {
+                alert('❌ Không tìm thấy nội dung MST!');
+                return;
+            }
+
+            const editor = document.getElementById('mstEditor');
+            const editorContent = document.getElementById('mstEditorContent');
+            
+            editorContent.innerHTML = `
+                <h4>Chỉnh sửa nội dung cho MST: ${mst}</h4>
+                <p style="color: #666; margin-bottom: 20px;">⚠️ CHỈ CHỈNH SỬA CÁC TRƯỜNG CÓ SẴN TRONG HTML, KHÔNG TỰ BỊA THÊM</p>
+                
+                <h5>📋 Thông tin cơ bản (6 trường)</h5>
+                <div class="form-group">
+                    <label>Tên công ty (info-name, user-name, info-header-name):</label>
+                    <input type="text" id="companyName" value="${mstSystem.mstData[mst].companyName}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Mã số thuế (info-mst, user-mst):</label>
+                    <input type="text" id="taxCode" value="${mstSystem.mstData[mst].taxCode}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ (info-address):</label>
+                    <textarea id="address" rows="2" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${mstSystem.mstData[mst].address}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại (info-phonenumber):</label>
+                    <input type="text" id="phone" value="${mstSystem.mstData[mst].phone}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Email (info-email):</label>
+                    <input type="email" id="email" value="${mstSystem.mstData[mst].email}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Tên CQT quản lý (info-taxoffice):</label>
+                    <input type="text" id="taxOffice" value="${mstSystem.mstData[mst].taxOffice || 'Cục Thuế TP.HCM'}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                
+                <h5>📢 Nội dung hiển thị (6 trường)</h5>
+                <div class="form-group">
+                    <label>Tên trong slide menu (slide-username, username):</label>
+                    <input type="text" id="slideUsername" value="${mstSystem.mstData[mst].companyName}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Số thông báo (code):</label>
+                    <input type="text" id="code" value="${content.code || 'TB001'}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Mã giao dịch (transaction):</label>
+                    <input type="text" id="transaction" value="${content.transaction || 'GD001'}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Thời gian tạo (created):</label>
+                    <input type="text" id="created" value="${content.created || new Date().toLocaleString('vi-VN')}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div class="form-group">
+                    <label>Nội dung thông báo (content):</label>
+                    <textarea id="content" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${content.notification || 'Thông báo hệ thống'}</textarea>
+                </div>
+                
+                <h5>📢 Nội dung thông báo (2 trường)</h5>
+                <div class="form-group">
+                    <label>Thông báo chào mừng (welcome-message):</label>
+                    <textarea id="welcomeMessage" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${content.welcomeMessage || 'Chào mừng đến với hệ thống eTax'}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Thông báo hệ thống (system-notification):</label>
+                    <textarea id="notification" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${content.notification || 'Thông báo hệ thống'}</textarea>
+                </div>
+                
+                <button onclick="saveMSTContent('${mst}')" class="btn">Lưu thay đổi</button>
+            `;
+            
+            editor.style.display = 'block';
+        }
+
+        function saveMSTContent(mst) {
+            if (!window.mstSystem) {
+                alert('❌ MST System chưa được load!');
+                return;
+            }
+
+            // CẬP NHẬT TẤT CẢ 25 TRƯỜNG THỰC TẾ TỪ HTML
+            // Thông tin cơ bản (6 trường)
+            mstSystem.mstData[mst].companyName = document.getElementById('companyName').value;
+            mstSystem.mstData[mst].taxCode = document.getElementById('taxCode').value;
+            mstSystem.mstData[mst].address = document.getElementById('address').value;
+            mstSystem.mstData[mst].phone = document.getElementById('phone').value;
+            mstSystem.mstData[mst].email = document.getElementById('email').value;
+            mstSystem.mstData[mst].taxOffice = document.getElementById('taxOffice').value;
+
+            // Cập nhật nội dung với tất cả trường
+            const content = {
+                // Thông tin hiển thị
+                code: document.getElementById('code').value,
+                transaction: document.getElementById('transaction').value,
+                created: document.getElementById('created').value,
+                
+                // Nội dung thông báo
+                welcomeMessage: document.getElementById('welcomeMessage').value,
+                notification: document.getElementById('notification').value,
+                content: document.getElementById('content').value
+            };
+
+            // Save to localStorage
+            mstSystem.saveMSTData();
+
+            if (mstSystem.updateMSTContent(mst, content)) {
+                alert('✅ Đã cập nhật tất cả 25 trường MST thành công!');
+                document.getElementById('mstEditor').style.display = 'none';
+                loadMSTList();
+            } else {
+                alert('❌ Lỗi khi cập nhật nội dung MST!');
+            }
+        }
+
+        function deleteMST(mst) {
+            if (!confirm(`Bạn có chắc muốn xóa MST ${mst}?`)) {
+                return;
+            }
+
+            if (!window.mstSystem) {
+                alert('❌ MST System chưa được load!');
+                return;
+            }
+
+            if (mstSystem.deleteMST(mst)) {
+                alert('✅ Đã xóa MST thành công!');
+                loadMSTList();
+            } else {
+                alert('❌ Lỗi khi xóa MST!');
+            }
+        }
+
+        // Add MST form handler
+        document.getElementById('addMSTForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!window.mstSystem) {
+                alert('❌ MST System chưa được load!');
+                return;
+            }
+
+            const mst = document.getElementById('newMST').value;
+            const password = document.getElementById('newPassword').value;
+            const companyInfo = {
+                companyName: document.getElementById('newCompanyName').value,
+                address: document.getElementById('newAddress').value,
+                phone: document.getElementById('newPhone').value,
+                email: document.getElementById('newEmail').value,
+                representative: document.getElementById('newRepresentative').value
+            };
+
+            if (mstSystem.addMST(mst, password, companyInfo)) {
+                alert('✅ Đã thêm MST thành công!');
+                closeAddMST();
+                document.getElementById('addMSTForm').reset();
+            } else {
+                alert('❌ MST đã tồn tại hoặc có lỗi xảy ra!');
+            }
+        });
+
+        // PDF Manager Functions
+        let pdfViewer = null;
+        let currentPDFUrl = null;
+
+        function openPDFManager() {
+            document.getElementById('pdfManagerModal').style.display = 'flex';
+            loadMSTSelect();
+        }
+
+        function closePDFManager() {
+            document.getElementById('pdfManagerModal').style.display = 'none';
+        }
+
+        function loadMSTSelect() {
+            const select = document.getElementById('pdfMstSelect');
+            select.innerHTML = '<option value="">Chọn MST</option>';
+            
+            if (window.mstSystem && window.mstSystem.mstData) {
+                Object.keys(window.mstSystem.mstData).forEach(mst => {
+                    const mstInfo = window.mstSystem.mstData[mst];
+                    const option = document.createElement('option');
+                    option.value = mst;
+                    option.textContent = `${mst} - ${mstInfo.companyName}`;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        function loadPDFList() {
+            const mst = document.getElementById('pdfMstSelect').value;
+            const pdfList = document.getElementById('pdfList');
+            
+            if (!mst) {
+                pdfList.innerHTML = '<p style="text-align: center; color: #666;">Vui lòng chọn MST</p>';
+                return;
+            }
+
+            // Load PDFs from localStorage
+            const pdfData = JSON.parse(localStorage.getItem(`pdf_${mst}`) || '[]');
+            
+            if (pdfData.length === 0) {
+                pdfList.innerHTML = '<p style="text-align: center; color: #666;">Chưa có PDF nào cho MST này</p>';
+                return;
+            }
+
+            pdfList.innerHTML = pdfData.map((pdf, index) => `
+                <div class="pdf-item">
+                    <div class="pdf-item-info">
+                        <i class="fas fa-file-pdf" style="color: #e74c3c; font-size: 20px;"></i>
+                        <div>
+                            <div style="font-weight: 600;">${pdf.name}</div>
+                            <div style="font-size: 12px; color: #666;">${pdf.size} KB</div>
+                        </div>
+                    </div>
+                    <div class="pdf-item-actions">
+                        <button class="pdf-item-btn" onclick="previewPDF('${pdf.url}', '${pdf.name}')">
+                            <i class="fas fa-eye"></i> Xem
+                        </button>
+                        <button class="pdf-item-btn secondary" onclick="downloadPDF('${pdf.url}', '${pdf.name}')">
+                            <i class="fas fa-download"></i> Tải
+                        </button>
+                        <button class="pdf-item-btn danger" onclick="deletePDF('${mst}', ${index})">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handlePDFUpload() {
+            const files = document.getElementById('pdfFileInput').files;
+            const mst = document.getElementById('pdfMstSelect').value;
+            
+            if (!mst) {
+                alert('❌ Vui lòng chọn MST trước!');
+                return;
+            }
+
+            if (files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                if (file.type === 'application/pdf') {
+                    uploadPDF(mst, file);
+                } else {
+                    alert(`❌ File ${file.name} không phải PDF!`);
+                }
+            });
+        }
+
+        function handlePDFDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            const mst = document.getElementById('pdfMstSelect').value;
+            
+            if (!mst) {
+                alert('❌ Vui lòng chọn MST trước!');
+                return;
+            }
+
+            Array.from(files).forEach(file => {
+                if (file.type === 'application/pdf') {
+                    uploadPDF(mst, file);
+                } else {
+                    alert(`❌ File ${file.name} không phải PDF!`);
+                }
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function uploadPDF(mst, file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const pdfData = {
+                    name: file.name,
+                    size: Math.round(file.size / 1024),
+                    url: e.target.result,
+                    uploadDate: new Date().toISOString()
+                };
+
+                // Save to localStorage
+                const existingPDFs = JSON.parse(localStorage.getItem(`pdf_${mst}`) || '[]');
+                existingPDFs.push(pdfData);
+                localStorage.setItem(`pdf_${mst}`, JSON.stringify(existingPDFs));
+
+                alert(`✅ Đã upload PDF: ${file.name}`);
+                loadPDFList();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewPDF(url, name) {
+            currentPDFUrl = url;
+            document.getElementById('pdfTitle').textContent = name;
+            document.getElementById('pdfPreviewModal').style.display = 'flex';
+            
+            // Initialize PDF viewer
+            if (!pdfViewer) {
+                pdfViewer = new PDFViewer();
+            }
+            pdfViewer.loadPDF(url);
+        }
+
+        function closePDFPreview() {
+            document.getElementById('pdfPreviewModal').style.display = 'none';
+            currentPDFUrl = null;
+        }
+
+        function confirmPDF() {
+            alert('✅ Đã xác nhận PDF!');
+            closePDFPreview();
+            // Quay lại app thuế
+            window.location.href = '../pages/index.html';
+        }
+
+        function printPDF() {
+            if (currentPDFUrl) {
+                const printWindow = window.open(currentPDFUrl);
+                printWindow.print();
+            }
+        }
+
+        function downloadPDF(url, name) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = name;
+            link.click();
+        }
+
+        function deletePDF(mst, index) {
+            if (!confirm('Bạn có chắc muốn xóa PDF này?')) return;
+
+            const existingPDFs = JSON.parse(localStorage.getItem(`pdf_${mst}`) || '[]');
+            existingPDFs.splice(index, 1);
+            localStorage.setItem(`pdf_${mst}`, JSON.stringify(existingPDFs));
+
+            alert('✅ Đã xóa PDF!');
+            loadPDFList();
+        }
+
+        // PDF Viewer Class
+        class PDFViewer {
+            constructor() {
+                this.pdfDoc = null;
+                this.pageNum = 1;
+                this.pageRendering = false;
+                this.pageNumPending = null;
+                this.scale = 1.5;
+                this.canvas = document.getElementById('pdf-canvas');
+                this.ctx = this.canvas.getContext('2d');
+            }
+
+            async loadPDF(pdfUrl) {
+                try {
+                    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                    this.pdfDoc = await loadingTask.promise;
+                    this.renderPage(this.pageNum);
+                } catch (error) {
+                    console.error('Error loading PDF:', error);
+                    alert('❌ Lỗi khi tải PDF!');
+                }
+            }
+
+            renderPage(num) {
+                this.pageRendering = true;
+                this.pdfDoc.getPage(num).then((page) => {
+                    const viewport = page.getViewport({scale: this.scale});
+                    this.canvas.height = viewport.height;
+                    this.canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: this.ctx,
+                        viewport: viewport
+                    };
+
+                    const renderTask = page.render(renderContext);
+                    renderTask.promise.then(() => {
+                        this.pageRendering = false;
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+</html>

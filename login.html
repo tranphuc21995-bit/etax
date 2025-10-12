@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+        <!-- PWA Manifest -->
+        <link rel="manifest" href="/manifest.json">
+        <!-- Perf hints -->
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
+        <!-- Theme colors -->
+        <meta name="theme-color" content="#b71c1c">
+        <meta name="msapplication-navbutton-color" content="#b71c1c">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+        <!-- Apple PWA Settings -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="eTax Mobile">
+
+        <!-- Apple Touch Icons -->
+        <link rel="apple-touch-icon" href="assets/logo.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="assets/logo.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/logo.png">
+        <link rel="apple-touch-icon" sizes="167x167" href="assets/logo.png">
+
+        <!-- Critical CSS Inline -->
+        <style>
+html,body {margin:0;padding:0;font-family:'Roboto',sans-serif;background:#000;color:white;min-height:100vh;overflow-x:hidden;box-sizing:border-box} 
+* {touch-action:manipulation;-webkit-overflow-scrolling:touch;-webkit-tap-highlight-color:transparent} 
+body {padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)} 
+.phone-frame {width:100vw !important;min-height:100vh !important;background-image:url('/assets/bglogin.png');background-size:cover;background-repeat:no-repeat;background-position:center center;border-radius:0 !important;margin:0 !important;box-shadow:none !important;display:flex;flex-direction:column} 
+.container {width:100%;max-width:420px;margin:0 auto;padding:24px 16px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;height:100vh;background:rgba(0,0,0,0.5);backdrop-filter:blur(2px)} 
+.header {display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.1)} 
+.logo-wrapper {text-align:center;margin-top:32px;margin-bottom:12px} 
+.logo {width:90px;margin-bottom:8px} 
+.loading {opacity:0.6;pointer-events:none} 
+@keyframes fadeIn {0% {opacity:0} 100% {opacity:1} } 
+.fade-in {animation:fadeIn 0.3s ease-in-out} 
+@media (max-width:480px) {.container {padding:16px 12px} .header {padding:12px 16px} }
+        </style>
+
+        <!-- Microsoft PWA -->
+        <meta name="msapplication-starturl" content="./login.html">
+        <meta name="msapplication-TileColor" content="#b71c1c">
+        <meta name="msapplication-TileImage" content="assets/logo.png">
+
+        <!-- Tắt số điện thoại tự động link -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <meta name="format-detection" content="address=no">
+
+        <!-- Security headers -->
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="css/login-original.css">
+        <!-- Theme System CSS -->
+        <link rel="stylesheet" href="css/user-interface-manager.css">
+        <link rel="stylesheet" href="css/pwa-optimizations.css">
+        <title>eTax Mobile - Đăng nhập</title>
+    </head>
+
+    <body>
+        <div class="phone-frame">
+            <!-- Logo và Title -->
+            <div class="logo-wrapper">
+                <img src="assets/logo.png" alt="Logo Thuế" class="logo" decoding="async" fetchpriority="high" />
+                <h1 class="title">eTax Mobile</h1>
+            </div>
+
+            <!-- Circular Login Form -->
+            <div class="login-form-container">
+                <form class="login-form" id="loginForm">
+                    <div class="error-msg" id="errorMsg"></div>
+
+                    <div class="form-group">
+                        <div class="input-icon-wrap">
+                            <input type="text" id="tax-id" placeholder="Mã số thuế" autocomplete="username" />
+                            <i class="fa-solid fa-user-large"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-icon-wrap">
+                            <input type="password" id="password" placeholder="Mật khẩu"
+                                autocomplete="current-password" />
+                            <i class="fa-solid fa-lock"></i>
+                            <i class="fa-solid fa-eye" id="togglePassword" onclick="togglePassword()"></i>
+                        </div>
+                    </div>
+
+                    <!-- Forgot Links -->
+                    <div class="forgot-links">
+                        <a href="javascript:void(0)">Quên tài khoản (mã số thuế)?</a>
+                        <a href="javascript:void(0)">Quên mật khẩu?</a>
+                    </div>
+
+                    <div class="btn-login-wrap">
+                        <button type="submit" class="btn-login" id="loginBtn">Đăng nhập</button>
+                        <img class="btn-faceid" src="assets/faceid.png" alt="FaceID" />
+                    </div>
+                </form>
+            </div>
+
+            <!-- VNeID Button -->
+            <div class="vneid-container">
+                <div class="btn-vneid">
+                    <div class="text-box">
+                        <div>Đăng nhập bằng tài khoản</div>
+                        <div class="line2">Định danh điện tử</div>
+                    </div>
+                    <img src="assets/vnid.png" alt="VNeID" loading="lazy" decoding="async" />
+                </div>
+            </div>
+
+            <!-- Register Link -->
+            <div class="register-link">
+                <span>Bạn chưa có tài khoản? </span>
+                <a href="/user/dangky.html">Đăng ký ngay</a>
+            </div>
+
+            <!-- Install PWA CTA -->
+            <div style="max-width:340px;margin:10px auto 0 auto;text-align:center">
+                <button id="installBtn" style="display:none;width:100%;padding:12px 16px;border:none;border-radius:10px;background:#b71c1c;color:#fff;font-weight:600;cursor:pointer">Cài đặt ứng dụng</button>
+            </div>
+
+            <!-- Bottom Functions -->
+            <div class="bottom-functions">
+                <div class="function-item">
+                    <img src="assets/icon-qr.png" alt="QR tém" loading="lazy" decoding="async">
+                    <span>QR tém</span>
+                </div>
+                <div class="function-item" onclick="window.location.href='/user/tienich.html'">
+                    <img src="assets/tienich.png" alt="Tiện ích" loading="lazy" decoding="async">
+                    <span>Tiện ích</span>
+                </div>
+                <div class="function-item" onclick="window.location.href='/user/hotro.html'">
+                    <img src="assets/hotro.png" alt="Hỗ trợ" loading="lazy" decoding="async">
+                    <span>Hỗ trợ</span>
+                </div>
+                <div class="function-item" onclick="shareApp()">
+                    <img src="assets/chiase.png" alt="Chia sẻ" loading="lazy" decoding="async">
+                    <span>Chia sẻ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firebase Scripts -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+        <!-- Theme System Scripts -->
+        <script src="src/services/theme-manager.js"></script>
+        <script src="src/services/placeholder-system.js"></script>
+
+        <script>
+            // ===== FIREBASE CONFIG ===== 
+            const firebaseConfig = {
+                apiKey: "AIzaSyD_rJgBFgBulheVenQUE2KXr4PBpSpTCxw",
+                authDomain: "etax-7fbf8.firebaseapp.com",
+                databaseURL: "https://etax-7fbf8-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "etax-7fbf8",
+                storageBucket: "etax-7fbf8.appspot.com",
+                messagingSenderId: "1030026724634",
+                appId: "1:1030026724634:web:d76f5f9dad43bad6fd58a3"
+            };
+
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+
+            // ===== MAIN INITIALIZATION ===== 
+            document.addEventListener('DOMContentLoaded', function () {
+                // Check if already logged in
+                const loggedInUser = localStorage.getItem('etax_logged_in_user');
+                if (loggedInUser) {
+                    console.log('User already logged in, redirecting...');
+                    window.location.href = '/src/pages/index.html';
+                    return;
+                }
+
+                // Setup form
+                setupLoginForm();
+
+                // Focus first input
+                document.getElementById('tax-id').focus();
+            });
+
+            function setupLoginForm() {
+                const form = document.getElementById('loginForm');
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    login();
+                });
+
+                // Enter key handlers
+                document.getElementById('password').addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        login();
+                    }
+                });
+            }
+
+            async function login() {
+                const taxId = document.getElementById('tax-id').value.trim();
+                const password = document.getElementById('password').value.trim();
+
+                if (!taxId) {
+                    showError("Vui lòng nhập mã số thuế.");
+                    return;
+                }
+
+                if (!password) {
+                    showError("Vui lòng nhập mật khẩu.");
+                    return;
+                }
+
+                const loginBtn = document.getElementById('loginBtn');
+                loginBtn.classList.add('loading');
+                loginBtn.textContent = 'Đang đăng nhập...';
+
+                try {
+                    // Query Firebase users
+                    const userSnapshot = await db.ref('users/' + taxId).once('value');
+                    if (!userSnapshot.exists()) {
+                        throw new Error("Tài khoản không tồn tại.");
+                    }
+
+                    const userData = userSnapshot.val();
+                    if (userData.password !== password) {
+                        throw new Error("Mật khẩu không chính xác.");
+                    }
+
+                    console.log('✅ Login successful for:', userData.fullName || userData.name);
+
+                    // Store enhanced session with theme support
+                    localStorage.setItem('etax_logged_in_user', taxId);
+                    localStorage.setItem('etax_user', JSON.stringify({
+                        id: taxId,
+                        mst: taxId,
+                        ...userData
+                    }));
+
+                    // Initialize theme based on user type (preview)
+                    if (window.themeManager) {
+                        const theme = determineUserTheme(userData);
+                        console.log('🎨 Determined theme for login:', theme);
+                        await window.themeManager.applyTheme(theme, userData);
+
+                        // Save theme preference
+                        await window.themeManager.saveUserThemePreference(taxId, theme, {
+                            ui_preferences: userData.ui_preferences || {}
+                        });
+                    }
+
+                    // Brief theme preview before redirect
+                    setTimeout(() => {
+                        window.location.href = '/src/pages/index.html';
+                    }, 800); // Allow theme to load
+
+                } catch (error) {
+                    showError(error.message);
+                    console.error('Login error:', error.message);
+                } finally {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.textContent = 'Đăng nhập';
+                }
+            }
+
+            function showError(message) {
+                const errorMsg = document.getElementById('errorMsg');
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 5000);
+            }
+
+            // ===== THEME DETERMINATION =====
+            function determineUserTheme(userData) {
+                // Check if user has preferred theme
+                if (userData.preferredTheme) {
+                    return userData.preferredTheme;
+                }
+
+                // Check user type
+                if (userData.userType) {
+                    return userData.userType;
+                }
+
+                // Auto-detect based on business type
+                if (userData.businessType) {
+                    const businessType = userData.businessType.toLowerCase();
+                    if (businessType.includes('dnnv') || businessType.includes('nhà nước')) {
+                        return 'government';
+                    } else if (businessType.includes('hkd') || businessType.includes('cá nhân')) {
+                        return 'individual';
+                    } else {
+                        return 'corporate';
+                    }
+                }
+
+                // Default to corporate
+                return 'corporate';
+            }
+
+            function togglePassword() {
+                const passwordInput = document.getElementById('password');
+                const toggleIcon = document.getElementById('togglePassword');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
+            }
+
+            // PWA Share function
+            function shareApp() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'eTax Mobile',
+                        text: 'Ứng dụng khai thuế điện tử',
+                        url: window.location.href
+                    }).catch(console.error);
+                } else {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(window.location.href);
+                        alert('Đã sao chép link vào clipboard!');
+                    } else {
+                        alert('Link: ' + window.location.href);
+                    }
+                }
+            }
+
+            console.log('✅ Simple login page loaded successfully!');
+
+            // ===== PWA INSTALL PROMPT =====
+            let deferredPrompt = null;
+            const installBtn = document.getElementById('installBtn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installBtn) installBtn.style.display = 'block';
+            });
+
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (!deferredPrompt) return;
+                    deferredPrompt.prompt();
+                    try {
+                        await deferredPrompt.userChoice;
+                    } finally {
+                        deferredPrompt = null;
+                        installBtn.style.display = 'none';
+                    }
+                });
+            }
+
+            window.addEventListener('appinstalled', () => {
+                if (installBtn) installBtn.style.display = 'none';
+            });
+        </script>
+        <script src="src/services/auth-simple.js"></script>
+        <script src="src/services/login-simple.js"></script>
+    </body>
+
+</html>
