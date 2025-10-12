@@ -1,81 +1,32 @@
 # eTax Mobile PWA
 
-**Clone 100% UX/UI eTax chính thức thành PWA tĩnh, tối ưu cho mobile với trải nghiệm native.**
+Ứng dụng di động eTax - Progressive Web App
 
-## 🚀 Quick Start
+## Tính năng
 
-```bash
-# Chạy development server
-python3 -m http.server 8080
+- ✅ Tra cứu chứng từ thuế
+- ✅ Thông tin nghĩa vụ thuế  
+- ✅ Khai thuế
+- ✅ Hóa đơn điện tử
+- ✅ Tiện ích thuế
+- ✅ PWA - Có thể cài đặt trên điện thoại
 
-# Truy cập
-http://127.0.0.1:8080/login.html
-```
+## Cách sử dụng
 
-## 📁 Cấu trúc dự án
+1. Mở trình duyệt trên điện thoại
+2. Truy cập: `https://[your-username].github.io/etax-mobile-pwa-HTML--main/`
+3. Nhấn "Thêm vào màn hình chính" để cài đặt như app
 
-```
-etax-mobile-pwa/
-├── login.html              # Entry point - Trang login
-├── manifest.json           # PWA manifest
-├── service-worker.js       # PWA service worker
-├── favicon.ico             # Favicon
-├── assets/                 # 187 ảnh tối ưu
-├── css/                    # Stylesheets minified
-├── src/                    # Source code
-│   ├── pages/              # 25 trang user + dashboard
-│   ├── admin-essential/    # 4 trang admin
-│   └── services/           # JavaScript services
-├── dev/                    # Development tools (3 files)
-├── docs/                   # Documentation
-├── scripts/                # Build scripts
-└── ảnh gốc/               # Reference images
-```
+## Demo
 
-## 🎯 Tính năng
+- **Trang chủ**: `login.html`
+- **Dashboard**: `src/pages/index.html`
+- **Tra cứu chứng từ**: `src/pages/tra-cuu-chung-tu.html`
+- **Thông tin nghĩa vụ thuế**: `src/pages/thongtinnvt.html`
 
-- ✅ **PWA chuẩn** - Installable, offline-first
-- ✅ **Mobile-first** - Tối ưu cho iOS/Android (360px-430px)
-- ✅ **25 trang user** - Clone 100% eTax chính thức
-- ✅ **4 trang admin** - Essential admin tools
-- ✅ **Performance cao** - Critical CSS inline, minified assets
-- ✅ **Native feel** - Touch gestures, haptic feedback
+## Công nghệ
 
-## 🛠️ Development
-
-```bash
-# Chạy server
-./scripts/start-dev-server.sh
-
-# Mobile simulator
-http://127.0.0.1:8080/dev/mobile-simulator.html
-
-# Super dev hub
-http://127.0.0.1:8080/dev/super-dev-hub.html
-```
-
-## 📱 PWA Features
-
-- **Installable** trên mobile/desktop
-- **Offline-first** hoạt động
-- **App shortcuts** - Khai thuế, Nộp thuế, Tra cứu
-- **Splash screen** cho iOS/Android
-- **Push notifications** (sẵn sàng)
-
-## 🎨 Tech Stack
-
-- **Frontend**: HTML5, CSS3, JavaScript ES6+
-- **PWA**: Service Worker, Web App Manifest
-- **Editor**: GrapesJS (Visual), Monaco Editor (Code)
-- **Storage**: localStorage (không cần backend)
-
-## 📊 Performance
-
-- **Lighthouse**: ≥95 điểm mục tiêu
-- **Critical CSS**: Inline cho loading nhanh
-- **Assets**: 187 ảnh tối ưu (WebP + PNG)
-- **Minified**: CSS/JS đã minify
-
----
-
-**📱 eTax Mobile PWA - Demo hoàn chỉnh không cần backend**
+- HTML5, CSS3, JavaScript
+- PWA (Progressive Web App)
+- Responsive Design
+- Mobile-First Approach
