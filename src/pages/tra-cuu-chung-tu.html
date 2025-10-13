@@ -118,7 +118,7 @@
     .result-table col.col-ref { width: 20%; }
     .result-table col.col-amount { width: 15%; }
     .result-table col.col-date { width: 25%; }
-    .result-table col.col-status { width: 30%; }
+    .result-table col.col-status { width: 25%; }
     .result-table col.col-print { width: 10%; }
 
     .result-table thead th {
@@ -157,11 +157,13 @@
       line-height: 1.3;
     }
     .result-table tbody td.status { 
-      font-size:13px; 
+      font-size:12px; 
       color:#333; 
       text-align:left; 
-      padding-left:8px; 
-      line-height:1.2; 
+      padding-left:6px; 
+      line-height:1.1; 
+      word-break: break-word;
+      white-space: normal;
     }
 
     /* Nút tròn in nhỏ hơn */
@@ -384,12 +386,12 @@
       setTimeout(()=>{
         const mockData = [
           {
-            id: 'cert_11020250025364806',
-            referenceNumber: '110202\n50044\n818128',
-            amount: '9600',
-            paymentDate: new Date('2025-10-11T12:36:52'),
-            status: 'Thành công – NH/TGTT đã trừ\ntiền thành công',
-            pdfLink: 'mockup.pdf'
+            id: 'cert_11020250031907891',
+            referenceNumber: '110202\n500319\n07891',
+            amount: '50000',
+            paymentDate: new Date('2025-06-04T10:09:15'),
+            status: 'Thành công – NH/TGTT đã trừ tiền thành công',
+            pdfLink: 'chung-tu-mau.pdf'
           }
         ];
         searchResults = mockData;
