@@ -101,10 +101,72 @@ html, body {
     }
 }
 
+/* ✅ STATUS BAR WITH 5 LINES */
+.status-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    color: white;
+    z-index: 1500;
+    padding: 8px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.status-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 16px;
+    margin: 2px 0;
+}
+
+.status-time {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.status-icons {
+    display: flex;
+    gap: 4px;
+}
+
+.status-icon {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 2px;
+}
+
+.status-carrier, .status-battery {
+    font-weight: 500;
+}
+
+.status-wifi, .status-signal {
+    font-weight: 500;
+}
+
+.status-date, .status-location {
+    font-weight: 500;
+}
+
+.status-app, .status-user {
+    font-weight: 500;
+    color: #d62828;
+}
+
 /* ✅ FULL WIDTH HEADER - NO CONSTRAINTS */
 .header {
     position: sticky;
-    top: 0;
+    top: 100px;
     z-index: 1000;
     background-color: #b71c1c; /* 🔴 Màu đỏ chuẩn từ hoadondt.html */
     color: white;
@@ -112,10 +174,8 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 100px;
+    height: 60px;
     width: 100vw;
-    /* 🔒 PWA Safe Area */
-    padding-top: max(12px, env(safe-area-inset-top));
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     font-family: 'Segoe UI', 'Tahoma', 'Microsoft Sans Serif', 'Arial', sans-serif; /* ✅ Font VN chuẩn */
 }
@@ -300,6 +360,95 @@ button:active {
     transform: scale(0.95);
 }
 
+/* ✅ SIDEBAR STYLES */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100vh;
+    background: #1a2734;
+    z-index: 2000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    padding-top: 100px;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1500;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.sidebar-header h3 {
+    color: white;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+    background-color: #2a3a4a;
+}
+
+.sidebar-menu i {
+    width: 20px;
+    margin-right: 15px;
+    font-size: 18px;
+    color: #d62828;
+}
+
+.sidebar-menu .menu-text {
+    flex: 1;
+}
+
+.sidebar-menu .menu-arrow {
+    font-size: 14px;
+    color: #666;
+}
+
 /* ✅ ACCESSIBILITY IMPROVEMENTS */
 @media (prefers-reduced-motion: reduce) {
     * {
@@ -313,14 +462,63 @@ button:active {
 <body>
     
     <div class="phone-frame">
-        <!-- ✅ CONSISTENT HEADER WITH PWA TEMPLATE -->
-        <header class="header" style="background-color: #b71c1c; color: white; height: 100px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding-top: max(12px, env(safe-area-inset-top));">
-            <i class="fas fa-arrow-left" onclick="history.back()" style="font-size: 20px; cursor: pointer;"></i>
-            <div class="header-title" style="font-size: 20px; font-weight: 500; text-align: center; flex: 1;">Thông tin tài khoản</div>
-            <i class="fas fa-house" onclick="history.back()" style="font-size: 20px; cursor: pointer; "></i>
+        <!-- ✅ STATUS BAR WITH 5 LINES -->
+        <div class="status-bar">
+            <div class="status-line">
+                <span class="status-time">11:59</span>
+                <div class="status-icons">
+                    <div class="status-icon"></div>
+                    <div class="status-icon"></div>
+                    <div class="status-icon"></div>
+                </div>
+            </div>
+            <div class="status-line">
+                <span class="status-carrier">Viettel</span>
+                <span class="status-battery">85%</span>
+            </div>
+            <div class="status-line">
+                <span class="status-wifi">WiFi</span>
+                <span class="status-signal">●●●●●</span>
+            </div>
+            <div class="status-line">
+                <span class="status-date">12/10/2025</span>
+                <span class="status-location">Hà Nội</span>
+            </div>
+            <div class="status-line">
+                <span class="status-app">eTax Mobile</span>
+                <span class="status-user">User</span>
+            </div>
+        </div>
+
+        <!-- ✅ HEADER WITH SIDEBAR TOGGLE -->
+        <header class="header" style="background-color: #b71c1c; color: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 100px; left: 0; right: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <i class="fas fa-arrow-left" onclick="window.location.href='/src/pages/index.html'" style="font-size: 20px; cursor: pointer;"></i>
+            <div class="header-title" style="font-size: 18px; font-weight: 500; text-align: center; flex: 1;">Thông tin tài khoản</div>
+            <i class="fas fa-house" onclick="window.location.href='/src/pages/index.html'" style="font-size: 20px; cursor: pointer;"></i>
         </header>
 
-        <div class="content-area" style="padding-top: 100px;">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/src/pages/index.html"><i class="fas fa-home"></i><span class="menu-text">Trang chủ</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/thongtin.html"><i class="fas fa-user"></i><span class="menu-text">Thông tin tài khoản</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/thongtinnvt.html"><i class="fas fa-building"></i><span class="menu-text">Thông tin người nộp thuế</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/tra-cuu-chung-tu.html"><i class="fas fa-search"></i><span class="menu-text">Tra cứu chứng từ</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/tracuttnpt.html"><i class="fas fa-file-invoice"></i><span class="menu-text">Tra cứu tờ khai thuế</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/tienich.html"><i class="fas fa-tools"></i><span class="menu-text">Tiện ích</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/thietlap.html"><i class="fas fa-cog"></i><span class="menu-text">Thiết lập</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="/src/pages/hotro.html"><i class="fas fa-question-circle"></i><span class="menu-text">Hỗ trợ</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Đăng xuất</span><i class="fas fa-chevron-right menu-arrow"></i></a></li>
+            </ul>
+        </div>
+
+        <div class="content-area" style="padding-top: 160px;">
             <!-- User Info Section -->
             <div class="user-section">
                 <h2 id="info-header-name">Tên đầy đủ</h2>
@@ -437,6 +635,42 @@ button:active {
         document.getElementById("info-phonenumber").innerText = userData.phone || "N/A";
         document.getElementById("info-email").innerText = userData.email || "N/A";
     }
+
+    // ===== SIDEBAR FUNCTIONS =====
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
+    function logout() {
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+            localStorage.removeItem('etax_logged_in_user');
+            localStorage.removeItem('etax_user');
+            localStorage.removeItem('etax_user_info');
+            window.location.href = '/login.html';
+        }
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.querySelector('.fa-bars');
+        
+        if (!sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+            closeSidebar();
+        }
+    });
 </script>
 </body>
 </html>
