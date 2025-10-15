@@ -435,7 +435,7 @@
       <form id="searchForm">
         <div class="form-group">
           <label for="mstInput">Mã số thuế</label>
-          <div class="tax-id-display">022097004736</div>
+          <div class="tax-id-display"><span id="tax_id">022097004736</span></div>
         </div>
 
         
@@ -484,7 +484,7 @@
               </div>
               <div class="tax-row">
                 <span class="tax-label">Số tiền</span>
-                <span class="tax-amount">9,600 VND</span>
+                <span class="tax-amount"><span id="amount">9,600 VND</span></span>
               </div>
               <div class="tax-row">
                 <span class="tax-label">Gợi ý xử lý</span>
@@ -608,8 +608,18 @@
 
     // ✅ PWA Performance
     if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
-      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+      navigator.serviceWorker.register('/service-worker.js?v=1760452052').catch(console.error);
     }
   </script>
+  <script src="src/services/user-session.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.userSession) {
+        window.userSession.requireAuth();
+        window.userSession.populateUserBindings();
+      }
+    });
+  </script>
+  <script src="../../js/data-loader.js"></script>
 </body>
 </html>

@@ -412,9 +412,9 @@
         const statusHtml = doc.status.replace(/\n/g, '<br/>');
         tr.innerHTML = `
           <td class="ref">${refHtml}</td>
-          <td class="amount">${amt}</td>
-          <td class="date">${dt}</td>
-          <td class="status">${statusHtml}</td>
+          <td class="amount"><span id="amount">${amt}</span></td>
+          <td class="date"><span id="date">${dt}</span></td>
+          <td class="status"><span id="status">${statusHtml}</span></td>
           <td class="print">
             <button class="print-btn" title="In chứng từ" data-id="${doc.id}">◉</button>
           </td>
@@ -480,6 +480,7 @@
       console.log('Printing all documents:', searchResults);
     }
   </script>
+  <script src="../../js/data-loader.js"></script>
 </body>
 </html>
 

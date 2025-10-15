@@ -1,0 +1,60 @@
+{
+  "001095026798": {
+    "mst": "001095026798",
+    "fullName": "TRẦN THÀNH PHÚC",
+    "address": "Tổ 1 Thanh Trì, Hoàng Mai, Hà Nội",
+    "taxOffice": "Cục Thuế Hà Nội",
+    "phoneNumber": "0900000001",
+    "email": "phuctt@example.com",
+    "password": "123456",
+    "dateOfBirth": "12/02/1995",
+    "gender": "Nam",
+    "nationality": "Việt Nam",
+    "placeOfOrigin": "Thanh Trì, Hoàng Mai, Hà Nội",
+    "idNumber": "001095000163"
+  },
+  "022097004736": {
+    "mst": "022097004736",
+    "fullName": "TRẦN THÀNH PHÚC",
+    "address": "Tổ 1 Thanh Trì, Hoàng Mai, Hà Nội",
+    "taxOffice": "Cục Thuế Hà Nội",
+    "phoneNumber": "0900000002",
+    "email": "phuctt@example.com",
+    "password": "123456",
+    "dateOfBirth": "12/02/1995",
+    "gender": "Nam",
+    "nationality": "Việt Nam",
+    "placeOfOrigin": "Thanh Trì, Hoàng Mai, Hà Nội",
+    "idNumber": "001095000163"
+  },
+  "8198700370": {
+    "mst": "8198700370",
+    "fullName": "TRẦN THÀNH PHÚC",
+    "address": "Tổ 1 Thanh Trì, Hoàng Mai, Hà Nội",
+    "taxOffice": "Cục Thuế Hà Nội",
+    "phoneNumber": "0900000003",
+    "email": "phuctt@example.com",
+    "password": "123456",
+    "dateOfBirth": "12/02/1995",
+    "gender": "Nam",
+    "nationality": "Việt Nam",
+    "placeOfOrigin": "Thanh Trì, Hoàng Mai, Hà Nội",
+    "idNumber": "001095000163"
+  },
+  "123456789": {
+    "mst": "123456789",
+    "fullName": "TRẦN THÀNH PHÚC",
+    "address": "Tổ 1 Thanh Trì, Hoàng Mai, Hà Nội",
+    "taxOffice": "Cục Thuế Hà Nội",
+    "phoneNumber": "0900000004",
+    "email": "phuctt@example.com",
+    "password": "123456",
+    "dateOfBirth": "12/02/1995",
+    "gender": "Nam",
+    "nationality": "Việt Nam",
+    "placeOfOrigin": "Thanh Trì, Hoàng Mai, Hà Nội",
+    "idNumber": "001095000163"
+  }
+}
+
+

@@ -624,7 +624,7 @@
       // Đăng ký Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-          navigator.serviceWorker.register('/service-worker.js')
+          navigator.serviceWorker.register('/service-worker.js?v=1760452052')
             .then(function (registration) {
               console.log('✅ ServiceWorker registered successfully');
             })
@@ -790,8 +790,8 @@
             style="width: 130px; height: 130px; margin-bottom: 15px; margin-top: 20px;" />
           <div class="slide-greeting"
             style="background: rgba(216,14,4,1); color: white; padding: 12px 20px; text-align: left; font-size: 22px; font-weight: 600; line-height: 1.3; box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 1px 3px rgba(0,0,0,0.3); width: 100%; margin: 0 0 15px 0;">
-            <div>Xin chào Nguyễn Trung</div>
-            <div style="font-size: 24px; font-weight: bold; margin-top: 5px;">Nghĩa</div>
+            <div>Xin chào <span id="slide-username"></span></div>
+            <div style="font-size: 24px; font-weight: bold; margin-top: 5px;"><span id="slide-username"></span></div>
           </div>
         </div>
         <div class="slide-links" style="padding: 0; overflow-y: auto; max-height: calc(100vh - 327px);">
@@ -894,7 +894,7 @@
 
               <img class="avatar" src="assets/avatar.png" alt="Avatar" style="width: 80px; height: 80px;" />
               <div class="userinfo-text" style="margin-left: 2px; flex-grow: 1;">
-                <div class="mst" style="color: black; font-size: 18px; font-weight: 400;" id="user-mst">MST: ...</div>
+                <div class="mst" style="color: black; font-size: 18px; font-weight: 400;" id="user-mst">MST: <span id="tax_id"></span></div>
                 <div class="username"
                   style="display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 20px; font-weight: 500; color: #5B0000; text-transform: uppercase;">
                   <span id="user-name">(Chưa đăng nhập)</span><a href="/user/thongtin.html"><img src="assets/nutha.png"
@@ -1193,22 +1193,12 @@
       function initializePage() {
         user = JSON.parse(localStorage.getItem("etax_user_info") || "{}");
 
-        // Default user info as per requirement
-        const defaultUserName = "Nguyễn Trung Nghĩa";
-        const defaultMST = "001095026798";
-
-        // Update with default values if not present
-        if (!user.name || user.name === "(Chưa đăng nhập)") {
-          user.name = defaultUserName;
-          user.mst = user.mst || defaultMST;
-          localStorage.setItem("etax_user_info", JSON.stringify(user));
-        }
-
-        document.getElementById("user-mst").innerText = "MST: " + (user.mst || defaultMST);
-        document.getElementById("user-name").innerText = (user.name || defaultUserName).toUpperCase();
-
-        if (document.getElementById("slide-username")) {
-          document.getElementById("slide-username").innerText = user.name || defaultUserName;
+        // Clear any cached data and force refresh
+        console.log('🔄 Clearing cache and refreshing user data...');
+        
+        // Force reload user session data
+        if (window.userSession) {
+          window.userSession.populateUserBindings();
         }
 
         // Đảm bảo event listeners được khởi tạo lại
@@ -1319,6 +1309,16 @@
 
     </script>
     <script src="src/services/auth-simple.js"></script>
+    <script src="src/services/user-session.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        if (window.userSession) {
+          window.userSession.requireAuth();
+          window.userSession.populateUserBindings();
+        }
+      });
+    </script>
+    <script src="../../js/data-loader.js"></script>
   </body>
 
 </html>

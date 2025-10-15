@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>eTax Mobile - Đăng nhập</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#b71c1c">
     <style>
@@ -15,7 +14,7 @@
         }
 
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             color: white;
             min-height: 100vh;
@@ -23,7 +22,7 @@
             position: relative;
         }
 
-        /* Background Pattern với chấm cam */
+        /* Background Image */
         body::before {
             content: '';
             position: fixed;
@@ -31,26 +30,32 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(255, 165, 0, 0.3) 1px, transparent 1px),
-                radial-gradient(circle at 80% 80%, rgba(255, 165, 0, 0.4) 1px, transparent 1px),
-                radial-gradient(circle at 40% 60%, rgba(255, 165, 0, 0.2) 1px, transparent 1px);
-            background-size: 50px 50px, 30px 30px, 40px 40px;
-            z-index: 1;
+            background: url('assets/bglogin.png') no-repeat center/cover fixed;
+            background-color: #000;
+            opacity: 1;
             pointer-events: none;
+            z-index: 0;
         }
 
-        /* Gradient overlay */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.9) 100%);
+        /* Central Emblem - Quốc huy mờ phía sau */
+        .central-emblem {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 2;
-            pointer-events: none;
+            opacity: 0.08;
+            width: 350px; /* Kích thước lớn hơn */
+            height: 350px;
+            background: url('assets/logo.png') no-repeat center center; /* Sử dụng logo.png */
+            background-size: contain;
+        }
+
+        .emblem-circle,
+        .emblem-star,
+        .emblem-star::before,
+        .emblem-star::after {
+            display: none; /* Ẩn các phần tử CSS tạo emblem cũ */
         }
 
         .app-container {
@@ -110,107 +115,34 @@
             border-radius: 1px;
         }
 
-        /* Central Emblem - Logo tròn với ngôi sao */
-        .central-emblem {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            opacity: 0.15;
-        }
-
-        .emblem-circle {
-            width: 200px;
-            height: 200px;
-            background: #000;
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #FFD700;
-        }
-
-        .emblem-star {
-            position: absolute;
-            top: 30px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 35px solid #FF0000;
-            transform: rotate(0deg);
-        }
-
-        .emblem-star::before {
-            content: '';
-            position: absolute;
-            top: 35px;
-            left: -20px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 35px solid #FF0000;
-        }
-
-        .emblem-wreath {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border: 4px solid #FFD700;
-            border-radius: 50%;
-            border-top: none;
-            border-left: none;
-            border-right: none;
-        }
-
-        .emblem-text {
-            position: absolute;
-            bottom: 20px;
-            color: #FFD700;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
         /* Logo Section */
         .logo-section {
             position: relative;
             z-index: 4;
             text-align: center;
-            margin-top: 80px;
+            margin-top: 70px;
             margin-bottom: 40px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            background: #FF0000;
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 15px;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            border: 3px solid #FFD700;
         }
 
-        .logo-star {
-            color: #FFD700;
-            font-size: 30px;
-            font-weight: bold;
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
-        .logo-text {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-            margin-bottom: 5px;
-        }
 
         .app-title {
             font-size: 28px;
@@ -224,7 +156,7 @@
         .login-form-container {
             position: relative;
             z-index: 4;
-            padding: 0 30px;
+            padding: 0 25px;
             margin-bottom: 25px;
         }
 
@@ -234,19 +166,18 @@
 
         .input-wrapper {
             position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 15px 0;
             display: flex;
             align-items: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .input-icon {
-            color: rgba(255, 255, 255, 0.7);
+            width: 20px;
+            height: 20px;
             margin-right: 15px;
-            font-size: 18px;
+            filter: brightness(0) invert(0.6);
         }
 
         .form-input {
@@ -263,10 +194,11 @@
         }
 
         .password-toggle {
-            color: rgba(255, 255, 255, 0.7);
+            width: 20px;
+            height: 20px;
             cursor: pointer;
-            font-size: 18px;
             margin-left: 15px;
+            filter: brightness(0) invert(0.6);
         }
 
         .forgot-links {
@@ -275,7 +207,7 @@
         }
 
         .forgot-link {
-            color: white;
+            color: #FFD700;
             text-decoration: none;
             font-size: 14px;
             margin-left: 15px;
@@ -289,60 +221,63 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            margin-top: 25px;
         }
 
         .login-button {
-            background: #FF0000;
+            background: #DC143C;
             color: white;
             border: none;
             padding: 15px 30px;
-            border-radius: 8px;
+            border-radius: 25px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             flex: 1;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
         }
 
         .login-button:hover {
-            background: #CC0000;
+            background: #B71C1C;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.5);
         }
 
         .faceid-icon {
-            width: 50px;
-            height: 50px;
-            filter: invert(1);
+            width: 54px; /* gần bằng chiều cao nút để cân đối */
+            height: 54px;
             cursor: pointer;
-            opacity: 0.8;
+            opacity: 1;
+            /* Giữ màu đỏ gốc của icon, thêm glow nhẹ để nổi trên nền tối */
+            filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.5));
         }
 
         /* VNeID Button */
         .vneid-container {
             position: relative;
             z-index: 4;
-            padding: 0 30px;
+            padding: 0 25px;
+            margin-top: 20px;
             margin-bottom: 30px;
         }
 
         .vneid-button {
             width: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .vneid-button:hover {
-            background: white;
+            background: #f5f5f5;
             transform: translateY(-2px);
         }
 
@@ -352,19 +287,21 @@
         }
 
         .vneid-text .line1 {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
+            color: #666;
         }
 
         .vneid-text .line2 {
             font-size: 16px;
             font-weight: 700;
+            color: #333;
             margin-top: 2px;
         }
 
         .vneid-icon {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
         }
 
         /* Register Section */
@@ -372,21 +309,21 @@
             position: relative;
             z-index: 4;
             text-align: center;
-            padding: 0 30px;
+            padding: 0 25px;
             margin-bottom: 100px;
         }
 
         .register-text {
-            color: white;
+            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 15px;
             font-size: 14px;
             line-height: 1.4;
         }
 
         .register-link {
-            color: #FF0000;
+            color: #FFD700;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .register-link:hover {
@@ -394,15 +331,15 @@
         }
 
         .foreigner-text {
-            color: white;
+            color: rgba(255, 255, 255, 0.85);
             font-size: 12px;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-top: 15px;
             padding: 0 10px;
         }
 
         .foreigner-link {
-            color: #FF0000;
+            color: #FFD700;
             text-decoration: none;
             font-weight: bold;
         }
@@ -447,8 +384,15 @@
         }
 
         .nav-icon {
-            font-size: 18px;
+            width: 28px;
+            height: 28px;
             margin-bottom: 4px;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-item span {
+            font-size: 11px;
+            color: white;
         }
 
         /* Error Message */
@@ -491,7 +435,7 @@
             }
             
             .logo-text {
-                font-size: 14px;
+                font-size: 8px;
             }
         }
     </style>
@@ -499,13 +443,7 @@
 <body>
     <div class="app-container">
         <!-- Central Emblem -->
-        <div class="central-emblem">
-            <div class="emblem-circle">
-                <div class="emblem-star"></div>
-                <div class="emblem-wreath"></div>
-                <div class="emblem-text">THUẾ NHÀ NƯỚC</div>
-            </div>
-        </div>
+        <div class="central-emblem"></div>
 
         <!-- Status Bar -->
         <div class="status-bar">
@@ -522,9 +460,8 @@
         <!-- Logo Section -->
         <div class="logo-section fade-in">
             <div class="logo">
-                <div class="logo-star">★</div>
+                <img src="assets/logo.png" alt="THUẾ NHÀ NƯỚC">
             </div>
-            <div class="logo-text">THUẾ NHÀ NƯỚC</div>
             <h1 class="app-title">eTax Mobile</h1>
         </div>
 
@@ -535,16 +472,16 @@
 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-user input-icon"></i>
+                        <img src="assets/avatar.png" alt="User" class="input-icon">
                         <input type="text" id="taxId" class="form-input" placeholder="Mã số thuế" autocomplete="username" value="8198700370">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-lock input-icon"></i>
+                        <img src="assets/icon-doimk.png" alt="Lock" class="input-icon">
                         <input type="password" id="password" class="form-input" placeholder="Mật khẩu" autocomplete="current-password">
-                        <i class="fa-solid fa-eye password-toggle" id="togglePassword"></i>
+                        <img src="assets/icon-change.png" alt="Eye" class="password-toggle" id="togglePassword">
                     </div>
                 </div>
 
@@ -584,19 +521,19 @@
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <div class="nav-item" onclick="openQR()">
-                <i class="fa-solid fa-qrcode nav-icon"></i>
+                <img src="assets/icon-qr.png" alt="QR tem" class="nav-icon">
                 <span>QR tem</span>
             </div>
             <div class="nav-item" onclick="window.location.href='src/pages/tienich.html'">
-                <i class="fa-solid fa-wrench nav-icon"></i>
+                <img src="assets/tienich.png" alt="Tiện ích" class="nav-icon">
                 <span>Tiện ích</span>
             </div>
             <div class="nav-item" onclick="window.location.href='src/pages/hotro.html'">
-                <i class="fa-solid fa-headset nav-icon"></i>
+                <img src="assets/hotro.png" alt="Hỗ trợ" class="nav-icon">
                 <span>Hỗ trợ</span>
             </div>
             <div class="nav-item" onclick="shareApp()">
-                <i class="fa-solid fa-share nav-icon"></i>
+                <img src="assets/chiase.png" alt="Chia sẻ" class="nav-icon">
                 <span>Chia sẻ</span>
             </div>
         </div>
@@ -610,37 +547,67 @@
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+                toggleIcon.src = 'assets/icon-xoatk.png';
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                toggleIcon.src = 'assets/icon-change.png';
             }
         });
 
         // Login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const taxId = document.getElementById('taxId').value;
+
+            const taxId = document.getElementById('taxId').value.trim();
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('errorMsg');
-            
-            if (!taxId || !password) {
-                errorMsg.textContent = 'Vui lòng nhập đầy đủ thông tin';
+            const loginBtn = document.getElementById('loginBtn');
+
+            function showError(msg) {
+                errorMsg.textContent = msg;
                 errorMsg.style.display = 'block';
+            }
+
+            errorMsg.style.display = 'none';
+
+            if (!taxId || !password) {
+                showError('Vui lòng nhập đầy đủ thông tin');
                 return;
             }
-            
-            // Simulate login process
-            errorMsg.style.display = 'none';
-            document.getElementById('loginBtn').textContent = 'Đang đăng nhập...';
-            
-            setTimeout(() => {
-                // Redirect to main page
+
+            try {
+                loginBtn.textContent = 'Đang đăng nhập...';
+                loginBtn.disabled = true;
+
+                const res = await fetch('data/users.json?v=' + Date.now() + '&_cb=' + Math.random());
+                if (!res.ok) throw new Error('Không tải được dữ liệu người dùng');
+                const users = await res.json();
+
+                const user = users[taxId];
+                if (!user) {
+                    showError('Mã số thuế không tồn tại');
+                    return;
+                }
+                if (user.password && password !== user.password) {
+                    showError('Mật khẩu không đúng');
+                    return;
+                }
+
+                // Lưu phiên đăng nhập
+                localStorage.setItem('etax_logged_in_user', taxId);
+                // Ẩn mật khẩu khi lưu
+                const { password: _pw, ...publicUser } = user;
+                localStorage.setItem('etax_user_info', JSON.stringify(publicUser));
+
+                // Điều hướng sang trang chính
                 window.location.href = 'src/pages/index.html';
-            }, 1500);
+            } catch (err) {
+                showError('Có lỗi khi đăng nhập. Vui lòng thử lại.');
+                console.error(err);
+            } finally {
+                loginBtn.textContent = 'Đăng nhập';
+                loginBtn.disabled = false;
+            }
         });
 
         // VNeID button click
