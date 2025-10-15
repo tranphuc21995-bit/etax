@@ -1,0 +1,49 @@
+{
+  "users": {
+    "001095026798": {
+      "fullName": " NGUYỄN MẠNH CƯỜNG",
+      "mst": "001092000187
+      
+    },
+    "022097004736": {
+      "fullName": "",
+      "mst": "022097004736"
+    },
+    "8198700370": {
+      "fullName": "",
+      "mst": "8198700370"
+    },
+    "123456789": {
+      "fullName": "",
+      "mst": "123456789"
+    }
+  },
+  "taxObligations": {
+    "obligation_1": {
+      "userId": "001095026798",
+      "userName": "",
+      "amounts": {
+        "small": "",
+        "medium": "",
+        "large": ""
+      },
+      "paymentId": "",
+      "taxOffice": "",
+      "region": "",
+      "decisionDate": ""
+    },
+    "obligation_2": {
+      "userId": "001095026798",
+      "userName": "",
+      "amounts": {
+        "small": "",
+        "medium": "",
+        "large": ""
+      },
+      "paymentId": "",
+      "taxOffice": "",
+      "region": "",
+      "decisionDate": ""
+    }
+  }
+}

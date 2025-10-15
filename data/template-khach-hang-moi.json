@@ -1,0 +1,23 @@
+{
+  "users": {
+    "KHACH_HANG_MOI": {
+      "fullName": "",
+      "mst": ""
+    }
+  },
+  "taxObligations": {
+    "obligation_template": {
+      "userId": "",
+      "userName": "",
+      "amounts": {
+        "small": "",
+        "medium": "",
+        "large": ""
+      },
+      "paymentId": "",
+      "taxOffice": "",
+      "region": "",
+      "decisionDate": ""
+    }
+  }
+}

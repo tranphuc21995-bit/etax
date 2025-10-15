@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eTax Admin - Template Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #a40000;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #a40000;
+        }
+
+        .btn {
+            background: #a40000;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background: #8a0000;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .obligation-list {
+            margin-top: 20px;
+        }
+
+        .obligation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #a40000;
+        }
+
+        .obligation-item h4 {
+            color: #a40000;
+            margin-bottom: 10px;
+        }
+
+        .obligation-item p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .obligation-actions {
+            margin-top: 10px;
+        }
+
+        .obligation-actions .btn {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #a40000;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #a40000;
+        }
+
+        .amounts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .export-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .export-textarea {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .amounts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 eTax Template Editor</h1>
+            <p>Quản lý thông tin user và nghĩa vụ thuế động</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Sidebar - User Selection -->
+            <div class="sidebar">
+                <h3 class="section-title">👤 Chọn User</h3>
+                
+                <div class="form-group">
+                    <label for="userSelect">MST User:</label>
+                    <select id="userSelect" onchange="loadUserData()">
+                        <option value="">-- Chọn user --</option>
+                    </select>
+                </div>
+
+                <div id="userInfo" style="display: none;">
+                    <h4>Thông tin User:</h4>
+                    <div class="form-group">
+                        <label for="userName">Họ tên:</label>
+                        <input type="text" id="userName" placeholder="VD: TRẦN THÀNH PHÚC">
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="saveUserInfo()">💾 Lưu thông tin User</button>
+                </div>
+
+                <div class="export-section">
+                    <h4>📤 Export/Import Data</h4>
+                    <button class="btn btn-secondary" onclick="exportData()">📋 Copy JSON</button>
+                    <button class="btn btn-secondary" onclick="showImportForm()">📥 Import JSON</button>
+                    
+                    <div id="importForm" style="display: none; margin-top: 15px;">
+                        <textarea id="importTextarea" class="export-textarea" placeholder="Paste JSON data vào đây..."></textarea>
+                        <button class="btn btn-success" onclick="importData()">✅ Import</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content - Obligations -->
+            <div class="content">
+                <h3 class="section-title">💰 Nghĩa vụ thuế</h3>
+                
+                <div id="alertContainer"></div>
+
+                <div id="obligationForm" style="display: none;">
+                    <h4>📝 Thông tin nghĩa vụ thuế</h4>
+                    
+                    <div class="amounts-grid">
+                        <div class="form-group">
+                            <label for="amountSmall">Số tiền nhỏ:</label>
+                            <input type="text" id="amountSmall" placeholder="VD: 50.000">
+                        </div>
+                        <div class="form-group">
+                            <label for="amountMedium">Số tiền trung:</label>
+                            <input type="text" id="amountMedium" placeholder="VD: 5,000,000">
+                        </div>
+                        <div class="form-group">
+                            <label for="amountLarge">Số tiền lớn:</label>
+                            <input type="text" id="amountLarge" placeholder="VD: 2,500,000">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentId">ID khoản phải nộp:</label>
+                        <input type="text" id="paymentId" placeholder="VD: 04057866369400001">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taxOffice">Tên cơ quan thu:</label>
+                        <input type="text" id="taxOffice" placeholder="VD: Đội Thuế thành phố Hạ Long">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="region">Địa bàn:</label>
+                        <input type="text" id="region" placeholder="VD: Thành phố Hạ Long (193HH)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="decisionDate">Ngày quyết định:</label>
+                        <input type="text" id="decisionDate" placeholder="VD: 07/01/2025">
+                    </div>
+
+                    <button class="btn" onclick="saveObligation()">💾 Lưu nghĩa vụ</button>
+                    <button class="btn btn-secondary" onclick="clearForm()">🗑️ Xóa form</button>
+                </div>
+
+                <div id="obligationList" class="obligation-list">
+                    <!-- Danh sách nghĩa vụ sẽ được load ở đây -->
+                </div>
+
+                <div id="addNewSection" style="display: none;">
+                    <button class="btn btn-success" onclick="showNewObligationForm()">➕ Thêm nghĩa vụ mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../src/services/template-data-service.js"></script>
+    <script>
+        let currentUserId = null;
+        let currentObligationId = null;
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+        });
+
+        // Load danh sách users
+        function loadUsers() {
+            const users = templateDataService.getAllUsers();
+            const select = document.getElementById('userSelect');
+            
+            select.innerHTML = '<option value="">-- Chọn user --</option>';
+            
+            Object.keys(users).forEach(userId => {
+                const option = document.createElement('option');
+                option.value = userId;
+                option.textContent = `${userId} - ${users[userId].fullName || 'Chưa có tên'}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Load dữ liệu user được chọn
+        function loadUserData() {
+            const userId = document.getElementById('userSelect').value;
+            if (!userId) {
+                hideAllSections();
+                return;
+            }
+
+            currentUserId = userId;
+            const userData = templateDataService.getUserTemplateData(userId);
+            
+            if (userData) {
+                // Hiển thị thông tin user
+                document.getElementById('userName').value = userData.user.fullName || '';
+                document.getElementById('userInfo').style.display = 'block';
+                
+                // Load danh sách nghĩa vụ
+                loadObligations(userData.obligations);
+            }
+        }
+
+        // Load danh sách nghĩa vụ
+        function loadObligations(obligations) {
+            const container = document.getElementById('obligationList');
+            container.innerHTML = '';
+
+            if (obligations.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Chưa có nghĩa vụ thuế nào</p>';
+            } else {
+                obligations.forEach((obligation, index) => {
+                    const obligationId = Object.keys(templateDataService.getAllObligations()).find(id => 
+                        templateDataService.getAllObligations()[id] === obligation
+                    );
+                    
+                    const div = document.createElement('div');
+                    div.className = 'obligation-item';
+                    div.innerHTML = `
+                        <h4>Nghĩa vụ #${index + 1}</h4>
+                        <p><strong>Số tiền nhỏ:</strong> ${obligation.amounts.small || 'Chưa có'}</p>
+                        <p><strong>Số tiền trung:</strong> ${obligation.amounts.medium || 'Chưa có'}</p>
+                        <p><strong>Số tiền lớn:</strong> ${obligation.amounts.large || 'Chưa có'}</p>
+                        <p><strong>ID khoản phải nộp:</strong> ${obligation.paymentId || 'Chưa có'}</p>
+                        <p><strong>Cơ quan thu:</strong> ${obligation.taxOffice || 'Chưa có'}</p>
+                        <p><strong>Địa bàn:</strong> ${obligation.region || 'Chưa có'}</p>
+                        <p><strong>Ngày quyết định:</strong> ${obligation.decisionDate || 'Chưa có'}</p>
+                        <div class="obligation-actions">
+                            <button class="btn" onclick="editObligation('${obligationId}')">✏️ Sửa</button>
+                            <button class="btn btn-secondary" onclick="deleteObligation('${obligationId}')">🗑️ Xóa</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            document.getElementById('addNewSection').style.display = 'block';
+        }
+
+        // Hiển thị form thêm nghĩa vụ mới
+        function showNewObligationForm() {
+            currentObligationId = null;
+            clearForm();
+            document.getElementById('obligationForm').style.display = 'block';
+        }
+
+        // Sửa nghĩa vụ
+        function editObligation(obligationId) {
+            currentObligationId = obligationId;
+            const obligations = templateDataService.getAllObligations();
+            const obligation = obligations[obligationId];
+            
+            if (obligation) {
+                document.getElementById('amountSmall').value = obligation.amounts.small || '';
+                document.getElementById('amountMedium').value = obligation.amounts.medium || '';
+                document.getElementById('amountLarge').value = obligation.amounts.large || '';
+                document.getElementById('paymentId').value = obligation.paymentId || '';
+                document.getElementById('taxOffice').value = obligation.taxOffice || '';
+                document.getElementById('region').value = obligation.region || '';
+                document.getElementById('decisionDate').value = obligation.decisionDate || '';
+                
+                document.getElementById('obligationForm').style.display = 'block';
+            }
+        }
+
+        // Lưu thông tin user
+        function saveUserInfo() {
+            const userName = document.getElementById('userName').value.trim();
+            
+            if (!userName) {
+                showAlert('Vui lòng nhập họ tên user', 'error');
+                return;
+            }
+
+            const success = templateDataService.updateUserTemplateData(currentUserId, {
+                fullName: userName
+            });
+
+            if (success) {
+                showAlert('✅ Lưu thông tin user thành công!', 'success');
+                loadUsers(); // Refresh dropdown
+            } else {
+                showAlert('❌ Lỗi khi lưu thông tin user', 'error');
+            }
+        }
+
+        // Lưu nghĩa vụ thuế
+        function saveObligation() {
+            if (!currentUserId) {
+                showAlert('Vui lòng chọn user trước', 'error');
+                return;
+            }
+
+            const obligationData = {
+                userName: document.getElementById('userName').value.trim(),
+                amounts: {
+                    small: document.getElementById('amountSmall').value.trim(),
+                    medium: document.getElementById('amountMedium').value.trim(),
+                    large: document.getElementById('amountLarge').value.trim()
+                },
+                paymentId: document.getElementById('paymentId').value.trim(),
+                taxOffice: document.getElementById('taxOffice').value.trim(),
+                region: document.getElementById('region').value.trim(),
+                decisionDate: document.getElementById('decisionDate').value.trim()
+            };
+
+            let success;
+            if (currentObligationId) {
+                // Cập nhật nghĩa vụ hiện có
+                success = templateDataService.updateObligation(currentObligationId, obligationData);
+            } else {
+                // Thêm nghĩa vụ mới
+                success = templateDataService.addNewObligation(currentUserId, obligationData);
+            }
+
+            if (success) {
+                showAlert('✅ Lưu nghĩa vụ thuế thành công!', 'success');
+                loadUserData(); // Refresh data
+                document.getElementById('obligationForm').style.display = 'none';
+            } else {
+                showAlert('❌ Lỗi khi lưu nghĩa vụ thuế', 'error');
+            }
+        }
+
+        // Xóa nghĩa vụ
+        function deleteObligation(obligationId) {
+            if (confirm('Bạn có chắc muốn xóa nghĩa vụ này?')) {
+                const success = templateDataService.deleteObligation(obligationId);
+                if (success) {
+                    showAlert('✅ Xóa nghĩa vụ thành công!', 'success');
+                    loadUserData(); // Refresh data
+                } else {
+                    showAlert('❌ Lỗi khi xóa nghĩa vụ', 'error');
+                }
+            }
+        }
+
+        // Xóa form
+        function clearForm() {
+            document.getElementById('amountSmall').value = '';
+            document.getElementById('amountMedium').value = '';
+            document.getElementById('amountLarge').value = '';
+            document.getElementById('paymentId').value = '';
+            document.getElementById('taxOffice').value = '';
+            document.getElementById('region').value = '';
+            document.getElementById('decisionDate').value = '';
+        }
+
+        // Ẩn tất cả sections
+        function hideAllSections() {
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('obligationForm').style.display = 'none';
+            document.getElementById('addNewSection').style.display = 'none';
+            document.getElementById('obligationList').innerHTML = '';
+        }
+
+        // Hiển thị alert
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            container.innerHTML = '';
+            container.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Export data
+        function exportData() {
+            const data = templateDataService.exportData();
+            navigator.clipboard.writeText(data).then(() => {
+                showAlert('✅ Đã copy JSON data vào clipboard!', 'success');
+            }).catch(() => {
+                showAlert('❌ Không thể copy data', 'error');
+            });
+        }
+
+        // Hiển thị form import
+        function showImportForm() {
+            const form = document.getElementById('importForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Import data
+        function importData() {
+            const jsonData = document.getElementById('importTextarea').value.trim();
+            if (!jsonData) {
+                showAlert('Vui lòng nhập JSON data', 'error');
+                return;
+            }
+
+            const success = templateDataService.importData(jsonData);
+            if (success) {
+                showAlert('✅ Import data thành công!', 'success');
+                loadUsers();
+                document.getElementById('importForm').style.display = 'none';
+                document.getElementById('importTextarea').value = '';
+            } else {
+                showAlert('❌ Lỗi khi import data - kiểm tra format JSON', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

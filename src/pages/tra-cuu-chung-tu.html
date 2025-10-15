@@ -221,24 +221,27 @@
     }
     .popup-body { padding: 22px 22px 16px; }
     .popup-title { font-size: 20px; font-weight:700; color:#111; margin-bottom:8px; }
-    .popup-sub { font-size:18px; color:#333; margin-bottom:6px; }
+    .popup-sub { font-size:18px; color:var(--red); margin-bottom:6px; }
     .popup-actions {
       display:flex;
       border-top: 2px solid rgba(183,28,28,0.08);
       background: #fff;
+      padding: 8px;
+      gap: 8px;
     }
     .popup-actions button {
       flex:1;
       padding: 16px 10px;
-      border: none;
+      border: 2px solid var(--red);
       background: transparent;
       font-size: 17px;
       font-weight:700;
       color: var(--red);
       cursor: pointer;
-    }
-    .popup-actions button:not(:last-child) {
-      border-right: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+      border-radius: 25px;
+      margin: 8px;
     }
 
     @media (max-width:420px){
@@ -390,7 +393,7 @@
             referenceNumber: '110202\n500319\n07891',
             amount: '50000',
             paymentDate: new Date('2025-06-04T10:09:15'),
-            status: 'Thành công – NH/TGTT đã trừ tiền thành công',
+            status: 'Thành\ncông\n–\nNH/TGTT\nđã\ntrừ\ntiền\nthành\ncông',
             pdfLink: 'chung-tu-mau.pdf'
           }
         ];

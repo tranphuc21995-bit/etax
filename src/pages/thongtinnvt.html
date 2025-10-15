@@ -506,7 +506,42 @@
     </main>
   </div>
 
+  <script src="../../src/services/template-data-service.js"></script>
   <script>
+    // ✅ Load template data
+    document.addEventListener('DOMContentLoaded', function() {
+      loadTemplateData();
+    });
+
+    function loadTemplateData() {
+      // Lấy user hiện tại từ localStorage
+      const currentUser = JSON.parse(localStorage.getItem("etax_user_info") || "{}");
+      const userId = currentUser.mst || "001095026798";
+      
+      // Load data từ template service
+      const userData = templateDataService.getUserTemplateData(userId);
+      
+      if (userData && userData.obligations.length > 0) {
+        updateTaxDisplay(userData.obligations[0]); // Hiển thị nghĩa vụ đầu tiên
+      }
+    }
+
+    function updateTaxDisplay(obligation) {
+      // Cập nhật số tiền
+      if (obligation.amounts.large) {
+        const amountElement = document.getElementById('amount');
+        if (amountElement) {
+          amountElement.textContent = obligation.amounts.large + ' VND';
+        }
+      }
+
+      // Cập nhật tên cơ quan thu
+      const taxOfficeElement = document.querySelector('.tax-office');
+      if (taxOfficeElement && obligation.taxOffice) {
+        taxOfficeElement.textContent = obligation.taxOffice;
+      }
+    }
+
     // ✅ PWA Navigation Functions
     function goBack() {
       if (window.history.length > 1) {
