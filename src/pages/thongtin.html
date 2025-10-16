@@ -101,72 +101,11 @@ html, body {
     }
 }
 
-/* ✅ STATUS BAR WITH 5 LINES */
-.status-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100vw;
-    height: 100px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-    color: white;
-    z-index: 1500;
-    padding: 8px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-family: 'Roboto', Arial, sans-serif;
-    font-size: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-.status-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 16px;
-    margin: 2px 0;
-}
-
-.status-time {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.status-icons {
-    display: flex;
-    gap: 4px;
-}
-
-.status-icon {
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 2px;
-}
-
-.status-carrier, .status-battery {
-    font-weight: 500;
-}
-
-.status-wifi, .status-signal {
-    font-weight: 500;
-}
-
-.status-date, .status-location {
-    font-weight: 500;
-}
-
-.status-app, .status-user {
-    font-weight: 500;
-    color: #d62828;
-}
 
 /* ✅ FULL WIDTH HEADER - NO CONSTRAINTS */
 .header {
     position: sticky;
-    top: 100px;
+    top: 0;
     z-index: 1000;
     background-color: #b71c1c; /* 🔴 Màu đỏ chuẩn từ hoadondt.html */
     color: white;
@@ -212,8 +151,8 @@ html, body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     position: relative;
-    height: calc(100vh - 100px);
-    max-height: calc(100vh - 100px);
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
 }
 
 .content-area::-webkit-scrollbar {
@@ -371,7 +310,7 @@ button:active {
     z-index: 2000;
     transition: left 0.3s ease;
     overflow-y: auto;
-    padding-top: 100px;
+    padding-top: 60px;
 }
 
 .sidebar.open {
@@ -462,36 +401,9 @@ button:active {
 <body>
     
     <div class="phone-frame">
-        <!-- ✅ STATUS BAR WITH 5 LINES -->
-        <div class="status-bar">
-            <div class="status-line">
-                <span class="status-time">11:59</span>
-                <div class="status-icons">
-                    <div class="status-icon"></div>
-                    <div class="status-icon"></div>
-                    <div class="status-icon"></div>
-                </div>
-            </div>
-            <div class="status-line">
-                <span class="status-carrier">Viettel</span>
-                <span class="status-battery">85%</span>
-            </div>
-            <div class="status-line">
-                <span class="status-wifi">WiFi</span>
-                <span class="status-signal">●●●●●</span>
-            </div>
-            <div class="status-line">
-                <span class="status-date">12/10/2025</span>
-                <span class="status-location">Hà Nội</span>
-            </div>
-            <div class="status-line">
-                <span class="status-app">eTax Mobile</span>
-                <span class="status-user">User</span>
-            </div>
-        </div>
 
         <!-- ✅ HEADER WITH SIDEBAR TOGGLE -->
-        <header class="header" style="background-color: #b71c1c; color: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 100px; left: 0; right: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <header class="header" style="background-color: #b71c1c; color: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
             <i class="fas fa-arrow-left" onclick="window.location.href='/src/pages/index.html'" style="font-size: 20px; cursor: pointer;"></i>
             <div class="header-title" style="font-size: 18px; font-weight: 500; text-align: center; flex: 1;">Thông tin tài khoản</div>
             <i class="fas fa-house" onclick="window.location.href='/src/pages/index.html'" style="font-size: 20px; cursor: pointer;"></i>
@@ -518,7 +430,7 @@ button:active {
             </ul>
         </div>
 
-        <div class="content-area" style="padding-top: 160px;">
+        <div class="content-area" style="padding-top: 60px;">
             <!-- User Info Section -->
             <div class="user-section">
                 <h2 id="info-header-name">Tên đầy đủ</h2>
