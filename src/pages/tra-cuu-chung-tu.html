@@ -131,32 +131,6 @@
       background: #a01515;
     }
 
-    /* ✅ CSS cho nút Nâng cao */
-    .btn-advanced {
-      background: transparent;
-      color: var(--red);
-      border: 1px solid var(--red);
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-    .btn-advanced:hover {
-      background: var(--red);
-      color: white;
-    }
-    .btn-advanced i {
-      font-size: 16px;
-    }
-
     /* Bảng kết quả */
     .result-table {
       margin-top: 18px;
@@ -338,11 +312,6 @@
           </div>
         </div>
         <button type="button" class="btn-search" onclick="searchDocuments()">Tra cứu</button>
-        
-        <!-- ✅ Nút Nâng cao -->
-        <button type="button" class="btn-advanced" onclick="showAdvancedOptions()">
-          <i class="fas fa-search-plus"></i> Nâng cao
-        </button>
       </form>
 
       <div class="result-table" id="resultsTable" style="display:none;">
