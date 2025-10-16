@@ -146,6 +146,7 @@
         color: #333;
         transition: all 0.3s ease;
         border-left: 4px solid #ff5722;
+        position: relative;
     }
     
     .notification-item:hover {
@@ -199,6 +200,26 @@
         height: 8px;
         background: #d32f2f;
         border-radius: 50%;
+    }
+
+    /* Red dot indicator for "view more" */
+    .notification-item::after {
+        content: '';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 10px;
+        height: 10px;
+        background: #d32f2f;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+    .notification-item:hover::after {
+        transform: scale(1.2);
+        box-shadow: 0 0 8px rgba(211, 47, 47, 0.5);
     }
 
 </style>
@@ -292,6 +313,28 @@
             return;
         }
         loadNotifications(loggedInMST);
+        
+        // Add click handler for red dot indicators
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.notification-item')) {
+                const notificationItem = e.target.closest('.notification-item');
+                const rect = notificationItem.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+                
+                // Check if click is near the red dot (right side, top area)
+                if (clickX > rect.width - 30 && clickY < 30) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Show expanded content or navigate to detail
+                    const href = notificationItem.getAttribute('href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                }
+            }
+        });
     });
 
     async function loadNotifications(mst) {
