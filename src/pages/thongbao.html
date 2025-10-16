@@ -68,6 +68,52 @@
         gap: 4px;
         cursor: pointer;
     }
+    
+    /* Advanced Search */
+    .advanced-search {
+        background: #f8f9fa;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        align-items: end;
+    }
+    
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .filter-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+    }
+    
+    .filter-group select,
+    .filter-group input[type="date"] {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    .clear-btn {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        align-self: end;
+    }
+    
+    .clear-btn:hover {
+        background: #5a6268;
+    }
     /* Notifications */
     .notifications { padding: 10px; }
     .time { color: #666; font-size: 12px; margin-bottom: 4px; }
@@ -76,6 +122,83 @@
         border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         display: block; text-decoration: none;
         color: #333; margin-bottom: 10px;
+    }
+    
+    /* Notification styles */
+    .notification-item-wrapper {
+        margin-bottom: 15px;
+    }
+    
+    .notification-time-standalone {
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    
+    .notification-item {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: block;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+        border-left: 4px solid #ff5722;
+    }
+    
+    .notification-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .notification-title {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #333;
+        line-height: 1.4;
+    }
+    
+    .notification-content {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+        margin-top: 8px;
+    }
+    
+    /* Category badges */
+    .notification-category {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        margin-top: 8px;
+    }
+    
+    .category-payment { background: #e8f5e8; color: #2e7d32; }
+    .category-system { background: #fff3e0; color: #f57c00; }
+    .category-account { background: #e3f2fd; color: #1976d2; }
+    .category-tax_obligation { background: #fce4ec; color: #c2185b; }
+    .category-update { background: #f3e5f5; color: #7b1fa2; }
+    
+    /* Unread indicator */
+    .notification-item.unread {
+        border-left-color: #d32f2f;
+        background: #fff5f5;
+    }
+    
+    .notification-item.unread::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 8px;
+        height: 8px;
+        background: #d32f2f;
+        border-radius: 50%;
     }
 
 </style>
@@ -104,8 +227,39 @@
 </div>
 
 <div class="search">
-    <input type="text" placeholder="Tìm theo nội dung hoặc ngày">
-    <button><i class="fas fa-plus"></i> Nâng cao</button>
+    <input type="text" id="searchInput" placeholder="Tìm theo nội dung hoặc ngày" onkeyup="filterNotifications()">
+    <button onclick="toggleAdvancedSearch()"><i class="fas fa-plus"></i> Nâng cao</button>
+</div>
+
+<div id="advancedSearch" class="advanced-search" style="display: none;">
+    <div class="filter-group">
+        <label>Loại thông báo:</label>
+        <select id="typeFilter" onchange="filterNotifications()">
+            <option value="">Tất cả</option>
+            <option value="general">Thông báo chung</option>
+            <option value="personal">Thông báo cá nhân</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Danh mục:</label>
+        <select id="categoryFilter" onchange="filterNotifications()">
+            <option value="">Tất cả</option>
+            <option value="payment">Thanh toán</option>
+            <option value="system">Hệ thống</option>
+            <option value="account">Tài khoản</option>
+            <option value="tax_obligation">Nghĩa vụ thuế</option>
+            <option value="update">Cập nhật</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Từ ngày:</label>
+        <input type="date" id="dateFrom" onchange="filterNotifications()">
+    </div>
+    <div class="filter-group">
+        <label>Đến ngày:</label>
+        <input type="date" id="dateTo" onchange="filterNotifications()">
+    </div>
+    <button onclick="clearFilters()" class="clear-btn">Xóa bộ lọc</button>
 </div>
 
 <div class="notification-list" id="notificationListContainer">
@@ -127,6 +281,9 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    let allNotifications = [];
+    let filteredNotifications = [];
 
     document.addEventListener('DOMContentLoaded', function() {
         const loggedInMST = localStorage.getItem('etax_logged_in_user');
@@ -157,30 +314,144 @@
             // Sort by publishDate descending (newest first)
             userNotifications.sort((a, b) => b[1].publishDate - a[1].publishDate);
 
-            container.innerHTML = ''; // Clear loading message
+            // Store in global variables
+            allNotifications = userNotifications;
+            filteredNotifications = [...userNotifications];
 
-            userNotifications.forEach(([key, notif]) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'notification-item-wrapper';
-
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'notification-time-standalone';
-                timeDiv.textContent = new Date(notif.publishDate).toLocaleString('vi-VN');
-
-                const itemLink = document.createElement('a');
-                itemLink.className = 'notification-item';
-                itemLink.href = `chi-tiet-thong-bao.html?id=${key}`;
-                itemLink.innerHTML = `<div class="notification-title">${notif.title}</div>`;
-
-                wrapper.appendChild(timeDiv);
-                wrapper.appendChild(itemLink);
-                container.appendChild(wrapper);
-            });
+            // Display notifications
+            displayNotifications();
 
         } catch (error) {
             console.error("Error loading notifications:", error);
             container.innerHTML = '<p>Lỗi khi tải thông báo.</p>';
         }
+    }
+
+    function displayNotifications() {
+        const container = document.getElementById('notificationListContainer');
+        container.innerHTML = '';
+
+        if (filteredNotifications.length === 0) {
+            container.innerHTML = '<p>Không có thông báo nào phù hợp với bộ lọc.</p>';
+            return;
+        }
+
+        filteredNotifications.forEach(([key, notif]) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'notification-item-wrapper';
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'notification-time-standalone';
+            timeDiv.textContent = new Date(notif.publishDate).toLocaleString('vi-VN');
+
+            const itemLink = document.createElement('a');
+            itemLink.className = 'notification-item';
+            itemLink.href = `chi-tiet-thong-bao.html?id=${key}`;
+            
+            // Tạo nội dung thông báo
+            let content = '';
+            if (notif.content && notif.content.length > 100) {
+                content = notif.content.substring(0, 100) + '...';
+            } else {
+                content = notif.content || '';
+            }
+            
+            // Tạo category badge
+            let categoryBadge = '';
+            if (notif.category) {
+                const categoryNames = {
+                    'payment': 'Thanh toán',
+                    'system': 'Hệ thống',
+                    'account': 'Tài khoản',
+                    'tax_obligation': 'Nghĩa vụ thuế',
+                    'update': 'Cập nhật'
+                };
+                const categoryName = categoryNames[notif.category] || notif.category;
+                categoryBadge = `<span class="notification-category category-${notif.category}">${categoryName}</span>`;
+            }
+            
+            itemLink.innerHTML = `
+                <div class="notification-title">${notif.title}</div>
+                <div class="notification-content">${content}</div>
+                ${categoryBadge}
+            `;
+
+            wrapper.appendChild(timeDiv);
+            wrapper.appendChild(itemLink);
+            container.appendChild(wrapper);
+        });
+    }
+
+    function filterNotifications() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('typeFilter').value;
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        filteredNotifications = allNotifications.filter(([key, notif]) => {
+            // Text search
+            if (searchTerm) {
+                const searchableText = (notif.title + ' ' + notif.content).toLowerCase();
+                if (!searchableText.includes(searchTerm)) {
+                    return false;
+                }
+            }
+
+            // Type filter
+            if (typeFilter && notif.type !== typeFilter) {
+                return false;
+            }
+
+            // Category filter
+            if (categoryFilter && notif.category !== categoryFilter) {
+                return false;
+            }
+
+            // Date filters
+            const notificationDate = new Date(notif.publishDate);
+            if (dateFrom) {
+                const fromDate = new Date(dateFrom);
+                if (notificationDate < fromDate) {
+                    return false;
+                }
+            }
+            if (dateTo) {
+                const toDate = new Date(dateTo);
+                toDate.setHours(23, 59, 59, 999); // End of day
+                if (notificationDate > toDate) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        displayNotifications();
+    }
+
+    function toggleAdvancedSearch() {
+        const advancedSearch = document.getElementById('advancedSearch');
+        const button = event.target.closest('button');
+        
+        if (advancedSearch.style.display === 'none') {
+            advancedSearch.style.display = 'grid';
+            button.innerHTML = '<i class="fas fa-minus"></i> Đóng';
+        } else {
+            advancedSearch.style.display = 'none';
+            button.innerHTML = '<i class="fas fa-plus"></i> Nâng cao';
+        }
+    }
+
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('categoryFilter').value = '';
+        document.getElementById('dateFrom').value = '';
+        document.getElementById('dateTo').value = '';
+        
+        filteredNotifications = [...allNotifications];
+        displayNotifications();
     }
 
     // ✅ PWA LOCK SETTINGS

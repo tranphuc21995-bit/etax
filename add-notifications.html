@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm thông báo mẫu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #b71c1c;
+            text-align: center;
+        }
+        button {
+            background: #b71c1c;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background: #d32f2f;
+        }
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Thêm thông báo mẫu vào eTax Mobile</h1>
+        
+        <div id="status" class="status info">
+            Nhấn nút bên dưới để thêm thông báo mẫu vào Firebase Database
+        </div>
+        
+        <button onclick="addNotifications()">Thêm thông báo mẫu</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_rJgBFgBulheVenQUE2KXr4PBpSpTCxw",
+            authDomain: "etax-7fbf8.firebaseapp.com",
+            databaseURL: "https://etax-7fbf8-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "etax-7fbf8",
+            storageBucket: "etax-7fbf8.appspot.com",
+            messagingSenderId: "1030026724634",
+            appId: "1:1030026724634:web:d76f5f9dad43bad6fd58a3"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const sampleNotifications = {
+            "notif_001": {
+                title: "Giao dịch nộp thuế",
+                content: "Người nộp thuế đã nộp thuế thành công. Mã tham chiếu: 11020250044818128. Số tiền nộp: 2,500,000 VNĐ. Thời gian: 11/10/2025 12:37:23",
+                type: "personal",
+                targetUser: "0123456789",
+                publishDate: new Date("2025-10-11T12:37:23").getTime(),
+                category: "payment"
+            },
+            "notif_002": {
+                title: "Thông báo kế hoạch tạm dừng hệ thống",
+                content: "Cục Thuế thông báo về việc tạm dừng các hệ thống thuế điện tử từ 18h00 ngày 27/6/2025 đến 06h00 ngày 28/6/2025 để bảo trì hệ thống.",
+                type: "general",
+                publishDate: new Date("2025-06-27T15:05:59").getTime(),
+                category: "system"
+            },
+            "notif_003": {
+                title: "Thông báo kế hoạch tạm dừng hệ thống",
+                content: "Cục Thuế thông báo về việc tạm dừng Dịch vụ Thuế điện tử trên thiết bị di động (eTax Mobile) từ 22h00 ngày 13/6/2025 đến 06h00 ngày 14/6/2025.",
+                type: "general",
+                publishDate: new Date("2025-06-13T16:34:34").getTime(),
+                category: "system"
+            },
+            "notif_004": {
+                title: "Thông báo kế hoạch tạm dừng hệ thống",
+                content: "Cục Thuế thông báo về việc tạm dừng Dịch vụ Thuế điện tử trên thiết bị di động (eTax Mobile) từ 22h00 ngày 13/6/2025 đến 06h00 ngày 14/6/2025.",
+                type: "general",
+                publishDate: new Date("2025-06-13T16:24:25").getTime(),
+                category: "system"
+            },
+            "notif_005": {
+                title: "V/v: Tài khoản giao dịch thuế điện tử",
+                content: "Thông báo về việc cập nhật thông tin tài khoản giao dịch thuế điện tử. Vui lòng kiểm tra và cập nhật thông tin tài khoản của bạn.",
+                type: "personal",
+                targetUser: "0123456789",
+                publishDate: new Date("2025-06-04T13:27:39").getTime(),
+                category: "account"
+            },
+            "notif_006": {
+                title: "Thông báo nghĩa vụ thuế mới",
+                content: "Có nghĩa vụ thuế mới phát sinh. Số tiền: 1,200,000 VNĐ. Hạn nộp: 25/10/2025. Vui lòng thực hiện nghĩa vụ thuế đúng hạn.",
+                type: "personal",
+                targetUser: "0123456789",
+                publishDate: new Date("2025-10-15T09:15:30").getTime(),
+                category: "tax_obligation"
+            },
+            "notif_007": {
+                title: "Cập nhật phần mềm eTax Mobile",
+                content: "Phiên bản mới của ứng dụng eTax Mobile đã có sẵn. Vui lòng cập nhật để có trải nghiệm tốt nhất và các tính năng mới.",
+                type: "general",
+                publishDate: new Date("2025-10-12T14:20:15").getTime(),
+                category: "update"
+            }
+        };
+
+        async function addNotifications() {
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+            
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Đang thêm thông báo...';
+            resultDiv.innerHTML = '';
+
+            try {
+                let addedCount = 0;
+                
+                for (const [key, notification] of Object.entries(sampleNotifications)) {
+                    await db.ref(`notifications/${key}`).set(notification);
+                    addedCount++;
+                    
+                    // Hiển thị tiến độ
+                    statusDiv.textContent = `Đang thêm thông báo ${addedCount}/${Object.keys(sampleNotifications).length}...`;
+                }
+                
+                statusDiv.className = 'status success';
+                statusDiv.textContent = `✅ Hoàn thành! Đã thêm ${addedCount} thông báo mẫu.`;
+                
+                resultDiv.innerHTML = `
+                    <h3>📋 Danh sách thông báo đã thêm:</h3>
+                    <ul>
+                        <li>Giao dịch nộp thuế (Personal)</li>
+                        <li>Thông báo kế hoạch tạm dừng hệ thống (General)</li>
+                        <li>Thông báo kế hoạch tạm dừng hệ thống (General)</li>
+                        <li>Thông báo kế hoạch tạm dừng hệ thống (General)</li>
+                        <li>Tài khoản giao dịch thuế điện tử (Personal)</li>
+                        <li>Thông báo nghĩa vụ thuế mới (Personal)</li>
+                        <li>Cập nhật phần mềm eTax Mobile (General)</li>
+                    </ul>
+                    <p><strong>💡 Lưu ý:</strong> Thông báo Personal sẽ chỉ hiển thị cho user có MST: 0123456789</p>
+                `;
+                
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Lỗi: ${error.message}`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

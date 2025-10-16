@@ -85,6 +85,36 @@
       top: calc(50% + 10px);
     }
 
+    /* ✅ CSS cho phần Mã tham chiếu */
+    .reference-field {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .reference-label {
+      display: block;
+      color: #333;
+      font-size: 14px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .reference-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      background: #fff;
+      color: #333;
+    }
+    .reference-input:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.1);
+    }
+    .reference-input::placeholder {
+      color: #999;
+    }
+
     .btn-search { 
       background: var(--red); 
       color:#fff; 
@@ -99,6 +129,32 @@
     }
     .btn-search:hover {
       background: #a01515;
+    }
+
+    /* ✅ CSS cho nút Nâng cao */
+    .btn-advanced {
+      background: transparent;
+      color: var(--red);
+      border: 1px solid var(--red);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-advanced:hover {
+      background: var(--red);
+      color: white;
+    }
+    .btn-advanced i {
+      font-size: 16px;
     }
 
     /* Bảng kết quả */
@@ -263,8 +319,15 @@
 
     <main class="content">
       <form id="searchForm" onsubmit="return false;">
+        <!-- ✅ Thêm phần Mã tham chiếu -->
+        <div class="reference-field">
+          <label class="reference-label">Mã tham chiếu</label>
+          <input type="text" id="referenceCode" class="reference-input" placeholder="Nhập mã tham chiếu">
+        </div>
+        
         <div class="date-input-group">
           <div class="date-field">
+            <label class="date-label">Từ ngày *</label>
             <input type="date" id="fromDate" class="date-input" placeholder="11/10/2024">
             <i class="fas fa-calendar-alt calendar-icon"></i>
           </div>
@@ -275,6 +338,11 @@
           </div>
         </div>
         <button type="button" class="btn-search" onclick="searchDocuments()">Tra cứu</button>
+        
+        <!-- ✅ Nút Nâng cao -->
+        <button type="button" class="btn-advanced" onclick="showAdvancedOptions()">
+          <i class="fas fa-search-plus"></i> Nâng cao
+        </button>
       </form>
 
       <div class="result-table" id="resultsTable" style="display:none;">
@@ -385,6 +453,10 @@
 
     async function searchDocuments(){
       if (!validateDateRange()) return;
+      
+      // ✅ Lấy giá trị mã tham chiếu
+      const referenceCode = document.getElementById('referenceCode').value.trim();
+      
       document.getElementById('resultsTable').style.display = 'none';
       setTimeout(()=>{
         const mockData = [
@@ -397,8 +469,17 @@
             pdfLink: 'chung-tu-mau.pdf'
           }
         ];
-        searchResults = mockData;
-        displayResults(mockData);
+        
+        // ✅ Lọc theo mã tham chiếu nếu có
+        let filteredData = mockData;
+        if (referenceCode) {
+          filteredData = mockData.filter(doc => 
+            doc.referenceNumber.replace(/\n/g, '').includes(referenceCode)
+          );
+        }
+        
+        searchResults = filteredData;
+        displayResults(filteredData);
       }, 600);
     }
 
@@ -424,12 +505,13 @@
         `;
         tbody.appendChild(tr);
       });
-      document.querySelectorAll('.print-btn').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          const id = btn.getAttribute('data-id');
-          printDocument(id);
-        });
-      });
+      // ✅ Đã chuyển chức năng in sang nút btn-print-bottom
+      // document.querySelectorAll('.print-btn').forEach(btn=>{
+      //   btn.addEventListener('click', ()=>{
+      //     const id = btn.getAttribute('data-id');
+      //     printDocument(id);
+      //   });
+      // });
       resultsTable.style.display = 'block';
       printBottomBtn.style.display = 'block';
     }
@@ -479,8 +561,21 @@
         alert('Không có chứng từ nào để in');
         return;
       }
+      
+      // ✅ In từng chứng từ một cách tuần tự
+      searchResults.forEach((doc, index) => {
+        setTimeout(() => {
+          printDocument(doc.id);
+        }, index * 1000); // Delay 1 giây giữa mỗi lần in
+      });
+      
       alert(`Bắt đầu in ${searchResults.length} chứng từ`);
       console.log('Printing all documents:', searchResults);
+    }
+
+    // ✅ Hàm xử lý nút Nâng cao
+    function showAdvancedOptions(){
+      alert('Tính năng Nâng cao đang được phát triển!\n\nCác tính năng sẽ có:\n- Tìm kiếm theo loại thuế\n- Lọc theo trạng thái\n- Xuất báo cáo\n- Tùy chỉnh hiển thị');
     }
   </script>
   <script src="../../js/data-loader.js"></script>
