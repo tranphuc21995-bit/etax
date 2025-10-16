@@ -308,6 +308,19 @@
 
             if (userNotifications.length === 0) {
                 container.innerHTML = '<p>Không có thông báo nào.</p>';
+                
+                // Thêm thông báo mặc định từ ảnh anh cung cấp
+                const defaultNotificationHtml = `
+                    <div class="notification-item-wrapper">
+                        <div class="notification-time-standalone">13/06/2025 16:24:25</div>
+                        <a href="chi-tiet-thong-bao.html?id=default_system_suspension" class="notification-item">
+                            <div class="notification-title">Thông báo kế hoạch tạm dừng hệ thống</div>
+                            <div class="notification-content">Cục Thuế thông báo về việc tạm dừng Dịch vụ Thuế điện tử trên thiết bị di động (eTax Mobil...)</div>
+                            <span class="notification-category category-system">Hệ thống</span>
+                        </a>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', defaultNotificationHtml);
                 return;
             }
 
@@ -333,6 +346,19 @@
 
         if (filteredNotifications.length === 0) {
             container.innerHTML = '<p>Không có thông báo nào phù hợp với bộ lọc.</p>';
+            
+            // Thêm thông báo mặc định từ ảnh anh cung cấp
+            const defaultNotificationHtml = `
+                <div class="notification-item-wrapper">
+                    <div class="notification-time-standalone">13/06/2025 16:24:25</div>
+                    <a href="chi-tiet-thong-bao.html?id=default_system_suspension" class="notification-item">
+                        <div class="notification-title">Thông báo kế hoạch tạm dừng hệ thống</div>
+                        <div class="notification-content">Cục Thuế thông báo về việc tạm dừng Dịch vụ Thuế điện tử trên thiết bị di động (eTax Mobil...)</div>
+                        <span class="notification-category category-system">Hệ thống</span>
+                    </a>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', defaultNotificationHtml);
             return;
         }
 
